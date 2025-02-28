@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import { debounce } from 'lodash';
 import useLocalStorage from '@/hooks/useLocalStorage';
 
@@ -329,47 +330,48 @@ const MemeExplorer = () => {
                                     variants={itemVariants}
                                     className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl 
                             transition-shadow duration-300 flex flex-col"
-                                >
-                                    {/* Meme Image */}
-                                    <div className="relative overflow-hidden aspect-square bg-gray-200 dark:bg-gray-700">
-                                        <img
-                                            src={meme.url}
-                                            alt={meme.name}
-                                            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                                            loading="lazy"
-                                        />
-                                    </div>
+                                ><Link href={`/meme/${meme.id}`} key={meme.id}>
+                                        {/* Meme Image */}
+                                        <div className="relative overflow-hidden aspect-square bg-gray-200 dark:bg-gray-700">
+                                            <img
+                                                src={meme.url}
+                                                alt={meme.name}
+                                                className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                                                loading="lazy"
+                                            />
+                                        </div>
 
-                                    {/* Meme Info */}
-                                    <div className="p-4 flex-grow flex flex-col">
-                                        <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2 line-clamp-1">
-                                            {meme.name}
-                                        </h3>
+                                        {/* Meme Info */}
+                                        <div className="p-4 flex-grow flex flex-col">
+                                            <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2 line-clamp-1">
+                                                {meme.name}
+                                            </h3>
 
-                                        {/* Simulated Metrics */}
-                                        <div className="mt-auto flex justify-between text-sm text-gray-500 dark:text-gray-400">
-                                            <div className="flex items-center">
-                                                <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                                                </svg>
-                                                {Math.floor(meme.id / 100)}k
-                                            </div>
+                                            {/* Simulated Metrics */}
+                                            <div className="mt-auto flex justify-between text-sm text-gray-500 dark:text-gray-400">
+                                                <div className="flex items-center">
+                                                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                                    </svg>
+                                                    {Math.floor(meme.id / 100)}k
+                                                </div>
 
-                                            <div className="flex items-center">
-                                                <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fillRule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clipRule="evenodd" />
-                                                </svg>
-                                                {meme.name.length}
-                                            </div>
+                                                <div className="flex items-center">
+                                                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fillRule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clipRule="evenodd" />
+                                                    </svg>
+                                                    {meme.name.length}
+                                                </div>
 
-                                            <div className="flex items-center">
-                                                <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                                                </svg>
-                                                {Math.floor(Math.random() * 30)}d
+                                                <div className="flex items-center">
+                                                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                                                    </svg>
+                                                    {Math.floor(Math.random() * 30)}d
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </Link>
                                 </motion.div>
                             );
                         })}

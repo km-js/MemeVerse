@@ -351,36 +351,38 @@ const Home = () => {
                     whileHover={{ y: -5 }}
                     className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
                   >
-                    <div className="aspect-square overflow-hidden bg-gray-200 dark:bg-gray-700">
-                      <img
-                        src={meme.url}
-                        alt={meme.name}
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                        loading="lazy"
-                      />
-                    </div>
+                    <Link href={`/meme/${meme.id}`} key={meme.id}>
+                      <div className="aspect-square overflow-hidden bg-gray-200 dark:bg-gray-700">
+                        <img
+                          src={meme.url}
+                          alt={meme.name}
+                          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
 
-                    <div className="p-4">
-                      <h3 className="font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">
-                        {meme.name}
-                      </h3>
+                      <div className="p-4">
+                        <h3 className="font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">
+                          {meme.name}
+                        </h3>
 
-                      <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
-                        <div className="flex items-center">
-                          <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                          </svg>
-                          {Math.floor(Math.random() * 15) + 5}k
-                        </div>
+                        <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
+                          <div className="flex items-center">
+                            <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                            </svg>
+                            {Math.floor(Math.random() * 15) + 5}k
+                          </div>
 
-                        <div className="flex items-center">
-                          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                          {Math.floor(Math.random() * 20) + 1}d ago
+                          <div className="flex items-center">
+                            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {Math.floor(Math.random() * 20) + 1}d ago
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   </motion.div>
                 ))}
               </motion.div>
