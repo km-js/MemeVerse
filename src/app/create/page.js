@@ -53,6 +53,50 @@ export default function MemeCreator() {
         setCaption(generatedCaption);
     };
 
+    // const handleUpload = async () => {
+    //     if (!selectedFile || !caption) {
+    //         alert('Please select an image and add a caption');
+    //         return;
+    //     }
+
+    //     setIsUploading(true);
+
+    //     try {
+    //         // Simulate upload to Cloudinary/Firebase
+    //         // In a real app, you would upload the image to your storage service
+    //         await new Promise(resolve => setTimeout(resolve, 1000));
+
+    //         const newMeme = {
+    //             id: Date.now().toString(),
+    //             imageUrl: previewUrl,
+    //             caption,
+    //             captionPosition,
+    //             fontSize,
+    //             fontColor,
+    //             createdAt: new Date().toISOString()
+    //         };
+
+    //         // Add to Context state
+    //         addMeme(newMeme);
+
+    //         // Reset form
+    //         setSelectedFile(null);
+    //         setPreviewUrl('');
+    //         setCaption('');
+    //         setCaptionPosition('top');
+    //         setFontSize(32);
+    //         setFontColor('#ffffff');
+    //         setIsEditing(false);
+
+    //         alert('Meme uploaded successfully!');
+    //     } catch (error) {
+    //         console.error('Error uploading meme:', error);
+    //         alert('Error uploading meme. Please try again.');
+    //     } finally {
+    //         setIsUploading(false);
+    //     }
+    // };
+
     const handleUpload = async () => {
         if (!selectedFile || !caption) {
             alert('Please select an image and add a caption');
@@ -62,18 +106,37 @@ export default function MemeCreator() {
         setIsUploading(true);
 
         try {
-            // Simulate upload to Cloudinary/Firebase
-            // In a real app, you would upload the image to your storage service
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            // Create FormData to send the image to ImgBB
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+
+            // Replace with your ImgBB API key
+            formData.append('key', process.env.NEXT_PUBLIC_IMGBB_API_KEY);
+
+            // Upload to ImgBB
+            const response = await fetch('https://api.imgbb.com/1/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error?.message || 'Upload failed');
+            }
+
+            // Get the hosted image URL from ImgBB response
+            const hostedImageUrl = data.data.url;
 
             const newMeme = {
                 id: Date.now().toString(),
-                imageUrl: previewUrl,
+                imageUrl: hostedImageUrl, // Use the hosted image URL
                 caption,
                 captionPosition,
                 fontSize,
                 fontColor,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                deleteUrl: data.data.delete_url // Store delete URL if needed later
             };
 
             // Add to Context state
@@ -91,7 +154,7 @@ export default function MemeCreator() {
             alert('Meme uploaded successfully!');
         } catch (error) {
             console.error('Error uploading meme:', error);
-            alert('Error uploading meme. Please try again.');
+            alert('Error uploading meme: ' + (error.message || 'Please try again.'));
         } finally {
             setIsUploading(false);
         }
