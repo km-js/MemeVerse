@@ -7,6 +7,7 @@ import MemeEditor from '@/components/create/MemeEditor';
 import MemePreview from '@/components/create/MemePreview';
 import MemeGallery from '@/components/create/MemeGallery';
 import AICaptionGenerator from '@/components/create/AICaptionGenerator';
+import UserProfile from '@/components/create/UserProfile';
 
 export default function MemeCreator() {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -17,9 +18,13 @@ export default function MemeCreator() {
     const [fontColor, setFontColor] = useState('#ffffff');
     const [isUploading, setIsUploading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
+    const [activeTab, setActiveTab] = useState('mymemes');
     const fileInputRef = useRef(null);
 
-    const { memes, addMeme } = useMeme();
+    const { memes, addMeme, getLikedMemes, likes, toggleLike, deleteMeme } = useMeme();
+
+    const userMemes = memes; // This could be filtered by user ID if you implement authentication
+    const likedMemes = getLikedMemes();
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -53,49 +58,6 @@ export default function MemeCreator() {
         setCaption(generatedCaption);
     };
 
-    // const handleUpload = async () => {
-    //     if (!selectedFile || !caption) {
-    //         alert('Please select an image and add a caption');
-    //         return;
-    //     }
-
-    //     setIsUploading(true);
-
-    //     try {
-    //         // Simulate upload to Cloudinary/Firebase
-    //         // In a real app, you would upload the image to your storage service
-    //         await new Promise(resolve => setTimeout(resolve, 1000));
-
-    //         const newMeme = {
-    //             id: Date.now().toString(),
-    //             imageUrl: previewUrl,
-    //             caption,
-    //             captionPosition,
-    //             fontSize,
-    //             fontColor,
-    //             createdAt: new Date().toISOString()
-    //         };
-
-    //         // Add to Context state
-    //         addMeme(newMeme);
-
-    //         // Reset form
-    //         setSelectedFile(null);
-    //         setPreviewUrl('');
-    //         setCaption('');
-    //         setCaptionPosition('top');
-    //         setFontSize(32);
-    //         setFontColor('#ffffff');
-    //         setIsEditing(false);
-
-    //         alert('Meme uploaded successfully!');
-    //     } catch (error) {
-    //         console.error('Error uploading meme:', error);
-    //         alert('Error uploading meme. Please try again.');
-    //     } finally {
-    //         setIsUploading(false);
-    //     }
-    // };
 
     const handleUpload = async () => {
         if (!selectedFile || !caption) {
@@ -167,6 +129,85 @@ export default function MemeCreator() {
         setIsEditing(false);
     };
 
+
+    const renderMeme = (meme) => {
+        const likeInfo = likes[meme.id] || { liked: false, count: 0 };
+
+        return (
+            <motion.div
+                key={meme.id}
+                whileHover={{ scale: 1.03 }}
+                className="bg-white rounded-lg shadow-md overflow-hidden relative group"
+            >
+                <div className="relative">
+                    <img
+                        src={meme.imageUrl}
+                        alt={meme.caption}
+                        className="w-full h-48 object-cover"
+                    />
+                    <div
+                        className={`absolute w-full text-center ${meme.captionPosition === 'top' ? 'top-2' : 'bottom-2'
+                            } px-2`}
+                    >
+                        <p
+                            style={{
+                                fontSize: `${meme.fontSize}px`,
+                                color: meme.fontColor,
+                                textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                                fontFamily: 'Impact, sans-serif',
+                                lineHeight: 1.2,
+                                margin: 0,
+                                padding: '5px 10px',
+                                wordBreak: 'break-word'
+                            }}
+                        >
+                            {meme.caption}
+                        </p>
+                    </div>
+                </div>
+
+                <div className="p-3 flex justify-between items-center">
+                    <span className="text-sm text-gray-500">
+                        {new Date(meme.createdAt).toLocaleDateString()}
+                    </span>
+                    <div className="flex space-x-2">
+                        <button
+                            onClick={() => toggleLike(meme.id)}
+                            className={`p-1 rounded hover:bg-gray-100 transition-colors ${likeInfo.liked ? 'text-red-500' : 'text-gray-400'
+                                }`}
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-6 w-6"
+                                fill={likeInfo.liked ? "currentColor" : "none"}
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={1.5}
+                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                                />
+                            </svg>
+                            {likeInfo.count > 0 && (
+                                <span className="text-xs ml-1">{likeInfo.count}</span>
+                            )}
+                        </button>
+                        <button
+                            onClick={() => deleteMeme(meme.id)}
+                            className="p-1 rounded text-gray-400 hover:text-red-500 hover:bg-gray-100 transition-colors"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </motion.div>
+        );
+    };
+
     return (
         <div className="min-h-screen bg-gray-100">
             <Head>
@@ -199,7 +240,9 @@ export default function MemeCreator() {
                 </div>
             </motion.header>
 
-            <main className="container mx-auto py-8 px-4">
+            <UserProfile />
+
+            <main className="container mx-auto py-4 px-4">
                 {isEditing ? (
                     <motion.div
                         initial={{ opacity: 0 }}

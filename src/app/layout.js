@@ -1,5 +1,4 @@
 import '@/styles/globals.css';
-// import ThemeWrapper from '@/components/ThemeWrapper';
 import MemeWrapper from '@/components/MemeWrapper';
 
 export default function RootLayout({ children }) {

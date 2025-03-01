@@ -5,7 +5,14 @@ const initialState = {
   memes: [],
   currentMeme: null,
   likes: {},
-  comments: {}
+  comments: {},
+  userProfile: {
+    name: 'Username',
+    bio: 'Tell us about yourself...',
+    email: 'user@example.com',
+    profileImage: '/default-avatar.png'
+  },
+  likedMemes: [] // Array of meme IDs that the user has liked
 };
 
 // Action types
@@ -14,6 +21,8 @@ const DELETE_MEME = 'DELETE_MEME';
 const SET_CURRENT_MEME = 'SET_CURRENT_MEME';
 const TOGGLE_LIKE = 'TOGGLE_LIKE';
 const ADD_COMMENT = 'ADD_COMMENT';
+const UPDATE_PROFILE = 'UPDATE_PROFILE';
+const UPDATE_PROFILE_IMAGE = 'UPDATE_PROFILE_IMAGE';
 
 // Reducer function
 const memeReducer = (state, action) => {
@@ -36,17 +45,30 @@ const memeReducer = (state, action) => {
     case TOGGLE_LIKE:
       const memeId = action.payload;
       const currentLikeState = state.likes[memeId] || { liked: false, count: 0 };
+      const isCurrentlyLiked = currentLikeState.liked;
+      
+      // Update likedMemes array
+      let updatedLikedMemes;
+      if (isCurrentlyLiked) {
+        // Remove from likedMemes if currently liked
+        updatedLikedMemes = state.likedMemes.filter(id => id !== memeId);
+      } else {
+        // Add to likedMemes if not currently liked
+        updatedLikedMemes = [...state.likedMemes, memeId];
+      }
+      
       return {
         ...state,
         likes: {
           ...state.likes,
           [memeId]: {
-            liked: !currentLikeState.liked,
-            count: currentLikeState.liked
+            liked: !isCurrentlyLiked,
+            count: isCurrentlyLiked
               ? Math.max(0, currentLikeState.count - 1)
               : currentLikeState.count + 1
           }
-        }
+        },
+        likedMemes: updatedLikedMemes
       };
     case ADD_COMMENT:
       const { id, comment } = action.payload;
@@ -55,6 +77,22 @@ const memeReducer = (state, action) => {
         comments: {
           ...state.comments,
           [id]: [...(state.comments[id] || []), comment]
+        }
+      };
+    case UPDATE_PROFILE:
+      return {
+        ...state,
+        userProfile: {
+          ...state.userProfile,
+          ...action.payload
+        }
+      };
+    case UPDATE_PROFILE_IMAGE:
+      return {
+        ...state,
+        userProfile: {
+          ...state.userProfile,
+          profileImage: action.payload
         }
       };
     default:
@@ -74,12 +112,16 @@ export const MemeProvider = ({ children }) => {
       const savedMemes = localStorage.getItem('memes');
       const savedLikes = localStorage.getItem('meme-likes');
       const savedComments = localStorage.getItem('meme-comments');
+      const savedUserProfile = localStorage.getItem('user-profile');
+      const savedLikedMemes = localStorage.getItem('liked-memes');
 
       return {
         memes: savedMemes ? JSON.parse(savedMemes) : initialState.memes,
         currentMeme: initialState.currentMeme,
         likes: savedLikes ? JSON.parse(savedLikes) : initialState.likes,
-        comments: savedComments ? JSON.parse(savedComments) : initialState.comments
+        comments: savedComments ? JSON.parse(savedComments) : initialState.comments,
+        userProfile: savedUserProfile ? JSON.parse(savedUserProfile) : initialState.userProfile,
+        likedMemes: savedLikedMemes ? JSON.parse(savedLikedMemes) : initialState.likedMemes
       };
     } catch (error) {
       console.error('Error loading from localStorage:', error);
@@ -95,8 +137,10 @@ export const MemeProvider = ({ children }) => {
       localStorage.setItem('memes', JSON.stringify(state.memes));
       localStorage.setItem('meme-likes', JSON.stringify(state.likes));
       localStorage.setItem('meme-comments', JSON.stringify(state.comments));
+      localStorage.setItem('user-profile', JSON.stringify(state.userProfile));
+      localStorage.setItem('liked-memes', JSON.stringify(state.likedMemes));
     }
-  }, [state.memes, state.likes, state.comments]);
+  }, [state.memes, state.likes, state.comments, state.userProfile, state.likedMemes]);
 
   // Action creators
   const addMeme = (meme) => {
@@ -120,7 +164,7 @@ export const MemeProvider = ({ children }) => {
       id: Date.now(),
       text,
       date: new Date().toISOString(),
-      author: 'Anonymous User' // Could be replaced with user authentication
+      author: state.userProfile.name || 'Anonymous User' // Use user's name if available
     };
 
     dispatch({
@@ -134,18 +178,43 @@ export const MemeProvider = ({ children }) => {
     return state.memes.find(meme => meme.id === id);
   };
 
+  // User profile actions
+  const updateProfile = (profileData) => {
+    dispatch({ type: UPDATE_PROFILE, payload: profileData });
+  };
+
+  const updateProfileImage = (imageUrl) => {
+    dispatch({ type: UPDATE_PROFILE_IMAGE, payload: imageUrl });
+  };
+
+  // Get liked memes (full objects, not just IDs)
+  const getLikedMemes = () => {
+    return state.memes.filter(meme => state.likedMemes.includes(meme.id));
+  };
+
+  // Check if a meme is liked
+  const isMemeLiked = (memeId) => {
+    return state.likedMemes.includes(memeId);
+  };
+
   return (
     <MemeContext.Provider value={{
       memes: state.memes,
       currentMeme: state.currentMeme,
       likes: state.likes,
       comments: state.comments,
+      userProfile: state.userProfile,
+      likedMemes: state.likedMemes,
       addMeme,
       deleteMeme,
       setCurrentMeme,
       toggleLike,
       addComment,
-      getMemeById
+      getMemeById,
+      updateProfile,
+      updateProfileImage,
+      getLikedMemes,
+      isMemeLiked
     }}>
       {children}
     </MemeContext.Provider>
