@@ -22,7 +22,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import useLocalStorage from '@/hooks/useLocalStorage';
+
 
 const Home = () => {
   // Theme state
@@ -138,18 +140,23 @@ const Home = () => {
           <div className="flex justify-between items-center">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
-              <svg className="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-7.536 5.879a1 1 0 001.415 0 3 3 0 014.242 0 1 1 0 001.415-1.415 5 5 0 00-7.072 0 1 1 0 000 1.415z" clipRule="evenodd" />
-              </svg>
+              {/* <svg className="w-8 h-8 text-light-yellow" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-.464 5.879a1 1 0 01-1.415 0 3 3 0 00-4.242 0 1 1 0 01-1.415-1.415 5 5 0 017.072 0 1 1 0 010 1.415z"
+                  clipRule="evenodd"
+                />
+              </svg> */}
+              <Image src='/logo.svg' alt="Logo" width={32} height={32} />
               <span className="text-xl font-bold text-gray-800 dark:text-white">MemeVerse</span>
             </Link>
 
             {/* Navigation Links */}
             <div className="hidden md:flex items-center space-x-6">
-              <Link href="/" className="text-blue-500 font-medium">Home</Link>
-              <Link href="/explore" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">Explore</Link>
-              <Link href="/create" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">Create</Link>
-              <Link href="/popular" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">Popular</Link>
+              <Link href="/" className="text-vibrant-pink dark:text-light-yellow font-medium">Home</Link>
+              <Link href="/explore" className="text-gray-600 dark:text-gray-300 hover:text-vibrant-pink dark:hover:text-light-yellow transition-colors">Explore</Link>
+              <Link href="/create" className="text-gray-600 dark:text-gray-300 hover:text-vibrant-pink dark:hover:text-light-yellow transition-colors">Create</Link>
+              <Link href="/leaderboard" className="text-gray-600 dark:text-gray-300 hover:text-vibrant-pink dark:hover:text-light-yellow transition-colors">Leaderboard</Link>
             </div>
 
             {/* Actions */}
@@ -160,7 +167,7 @@ const Home = () => {
                 className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                 aria-label="Toggle Dark Mode"
               >
- 
+
                 {darkMode ? (
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -187,7 +194,7 @@ const Home = () => {
               {/* Explore Button */}
               <Link
                 href="/explore"
-                className="hidden sm:block bg-blue-500 hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-lg transition-colors"
+                className="hidden sm:block bg-light-yellow hover:bg-bright-blue text-black font-medium px-4 py-2 rounded-lg transition-colors"
               >
                 Explore Memes
               </Link>
@@ -209,7 +216,7 @@ const Home = () => {
                 variants={heroVariants}
               >
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-                  Discover the <span className="text-blue-500">Funniest</span> Memes Online
+                  Discover the <span className="text-vibrant-pink">Funniest</span> Memes Online
                 </h1>
                 <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
                   Browse thousands of viral memes, create your own, and share with friends.
@@ -218,7 +225,7 @@ const Home = () => {
                 <div className="flex flex-wrap gap-4">
                   <Link
                     href="/explore"
-                    className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-6 py-3 rounded-lg transition-colors"
+                    className="bg-light-yellow hover:bg-vibrant-pink text-black font-medium px-6 py-3 rounded-lg transition-colors"
                   >
                     Start Exploring
                   </Link>
@@ -402,24 +409,61 @@ const Home = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-          <div className="container mx-auto px-4 text-center">
+        <section className="py-16 bg-yellow-400 text-black relative overflow-hidden">
+          {/* Funky background patterns */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-black"></div>
+            <div className="absolute bottom-0 left-0 w-full h-1 bg-black"></div>
+            <div className="absolute left-0 top-0 w-1 h-full bg-black"></div>
+            <div className="absolute right-0 top-0 w-1 bg-black h-full"></div>
+
+            {/* Comic-style dots pattern */}
+            <div className="absolute top-4 left-4 w-8 h-8 rounded-full bg-purple-500"></div>
+            <div className="absolute bottom-10 right-10 w-12 h-12 rounded-full bg-purple-500"></div>
+            <div className="absolute top-1/2 right-6 w-6 h-6 rounded-full bg-purple-500"></div>
+            <div className="absolute bottom-1/3 left-12 w-10 h-10 rounded-full bg-purple-500"></div>
+          </div>
+
+          {/* Comic-style elements */}
+          <div className="absolute -left-4 top-8 transform rotate-12">
+            <div className="bg-white p-3 rounded-lg transform rotate-6 shadow-lg">
+              <p className="font-bold text-xl">LOLZ!</p>
+            </div>
+          </div>
+
+          <div className="absolute -right-4 bottom-8 transform -rotate-12">
+            <div className="bg-white p-3 rounded-lg transform -rotate-3 shadow-lg">
+              <p className="font-bold text-xl">ROFL!</p>
+            </div>
+          </div>
+
+          <div className="container mx-auto px-4 text-center relative z-2">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-3xl font-bold mb-6">Ready to start your meme journey?</h2>
-              <p className="max-w-2xl mx-auto mb-8 text-blue-100">
-                Join thousands of meme enthusiasts sharing and discovering the internet's freshest content.
-              </p>
-              <Link
-                href="/explore"
-                className="bg-white text-blue-600 hover:bg-blue-50 font-medium px-8 py-3 rounded-lg transition-colors inline-block"
-              >
-                Explore All Memes
-              </Link>
+              <div className="bg-white mx-auto max-w-3xl p-8 rounded-xl border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                <h2 className="text-3xl font-extrabold mb-6 uppercase">MEMES. LOTS OF 'EM!</h2>
+                <p className="max-w-2xl mx-auto mb-8 text-lg">
+                  Why so serious? Join the fun with thousands of fellow memers!
+                </p>
+
+                <Link
+                  href="/explore"
+                  className="bg-blue-500 text-white font-extrabold px-8 py-3 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all inline-block uppercase"
+                >
+                  Show Me The Memes
+                </Link>
+
+                <div className="mt-6 flex justify-center">
+                  <div className="bg-purple-100 p-2 rounded-full px-4 inline-flex items-center text-sm">
+                    <span className="font-bold">69,420</span>
+                    <span className="ml-1">memes and counting!</span>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </div>
         </section>
@@ -431,9 +475,7 @@ const Home = () => {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-8 md:mb-0">
               <div className="flex items-center space-x-2 mb-4">
-                <svg className="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-7.536 5.879a1 1 0 001.415 0 3 3 0 014.242 0 1 1 0 001.415-1.415 5 5 0 00-7.072 0 1 1 0 000 1.415z" clipRule="evenodd" />
-                </svg>
+                <Image src='/logo.svg' alt="Logo" width={32} height={32} />
                 <span className="text-xl font-bold text-gray-800 dark:text-white">MemeVerse</span>
               </div>
               <p className="text-gray-600 dark:text-gray-300 max-w-md">
