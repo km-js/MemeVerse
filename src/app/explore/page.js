@@ -263,7 +263,7 @@ export default function MemeExplorer() {
                             placeholder="Search for memes... 🔎"
                             className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 
                                 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 
-                                focus:ring-pink-500 focus:border-transparent transition-all shadow-sm hover:shadow"
+                                focus:ring-yellow-500 focus:border-transparent transition-all shadow-sm hover:shadow"
                         />
                         {searchQuery && (
                             <button
@@ -277,7 +277,7 @@ export default function MemeExplorer() {
 
                     {/* Toggle Filters Button (Mobile) */}
                     <button
-                        className="md:hidden mt-4 w-full py-2 px-4 bg-vibrant-pink text-white rounded-lg flex items-center justify-center"
+                        className="md:hidden mt-4 w-full py-2 px-4 bg-yellow-600 text-white rounded-lg flex items-center justify-center"
                         onClick={() => setShowFilters(!showFilters)}
                     >
                         <span>{showFilters ? 'Hide Filters' : 'Show Filters'}</span>
@@ -302,7 +302,7 @@ export default function MemeExplorer() {
                                                 key={cat.id}
                                                 onClick={() => setCategory(cat.id)}
                                                 className={`px-4 py-2 rounded-full font-medium ${category === cat.id
-                                                    ? 'bg-vibrant-pink hover:bg-pink-600 text-white'
+                                                    ? 'bg-yellow-600 hover:bg-yellow-600 text-white'
                                                     : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
                                                     } transition-colors shadow-sm`}
                                             >
@@ -318,7 +318,7 @@ export default function MemeExplorer() {
                                             onChange={(e) => setSortBy(e.target.value)}
                                             className="appearance-none w-full bg-white dark:bg-gray-700 border border-gray-300 
                                             dark:border-gray-600 text-gray-800 dark:text-white rounded-lg py-2 
-                                            pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-pink-500 shadow-sm"
+                                            pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-yellow-500 shadow-sm"
                                         >
                                             {sortOptions.map(option => (
                                                 <option key={option.value} value={option.value}>{option.label}</option>
@@ -367,7 +367,7 @@ export default function MemeExplorer() {
                         <p className="mt-2 text-gray-500 dark:text-gray-400">Try a different search or browse categories</p>
                         <button
                             onClick={clearSearch}
-                            className="mt-4 px-4 py-2 bg-vibrant-pink text-white rounded-lg hover:bg-pink-600 transition-colors"
+                            className="mt-4 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-600 transition-colors"
                         >
                             Clear Search
                         </button>
@@ -407,7 +407,7 @@ export default function MemeExplorer() {
                                     {/* Meme Info */}
                                     <div className="p-4 flex-grow flex flex-col">
                                         <Link href={`/meme/${meme.id}`} className="block">
-                                            <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2 line-clamp-1 group-hover:text-pink-500 dark:group-hover:text-pink-400 transition-colors">
+                                            <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2 line-clamp-1 group-hover:text-yellow-500 dark:group-hover:text-yellow-400 transition-colors">
                                                 {meme.name}
                                             </h3>
                                         </Link>
@@ -440,7 +440,7 @@ export default function MemeExplorer() {
                 {loading && (
                     <div className="flex flex-col items-center justify-center py-10 space-y-4">
                         <div className="relative">
-                            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-pink-500"></div>
+                            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-yellow-500"></div>
                             <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl">🤣</span>
                         </div>
                         <p className="text-gray-600 dark:text-gray-300 animate-pulse font-medium">{getLoadingMessage()}</p>

@@ -82,7 +82,7 @@ export default function Leaderboard() {
                     <button
                         onClick={() => setActiveTab('topMemes')}
                         className={`px-6 py-2 rounded-md font-medium text-sm transition-all ${activeTab === 'topMemes'
-                            ? 'bg-white shadow text-vibrant-pink'
+                            ? 'bg-white shadow text-yellow-600'
                             : 'text-gray-600 hover:text-gray-900'
                             }`}
                     >
@@ -91,7 +91,7 @@ export default function Leaderboard() {
                     <button
                         onClick={() => setActiveTab('topUsers')}
                         className={`px-6 py-2 rounded-md font-medium text-sm transition-all ${activeTab === 'topUsers'
-                            ? 'bg-white shadow text-vibrant-pink'
+                            ? 'bg-white shadow text-yellow-600'
                             : 'text-gray-600 hover:text-gray-900'
                             }`}
                     >
@@ -103,7 +103,7 @@ export default function Leaderboard() {
             {/* Loading State */}
             {isLoading ? (
                 <div className="flex justify-center items-center py-20">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-vibrant-pink"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-600"></div>
                 </div>
             ) : (
                 <AnimatePresence mode="wait">
@@ -125,7 +125,7 @@ export default function Leaderboard() {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                     <p className="mt-4 text-gray-500">No memes found. Be the first to create popular content!</p>
-                                    <Link href="/create" className="mt-4 inline-block px-4 py-2 bg-vibrant-pink text-white rounded-md hover:bg-pink-800 transition-colors">
+                                    <Link href="/create" className="mt-4 inline-block px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-600 transition-colors">
                                         Create a Meme
                                     </Link>
                                 </div>
@@ -213,7 +213,7 @@ export default function Leaderboard() {
                                                 animate="visible"
                                                 transition={{ delay: index * 0.1 }}
                                             >
-                                                <div className={`flex items-center justify-center w-8 h-8 rounded-full font-bold mr-4 ${index === 0 ? 'bg-yellow-400 text-yellow-800' :
+                                                <div className={`flex items-center justify-center w-8 h-8 rounded-full font-bold mr-4 ${index === 0 ? 'bg-yellow-400 text-yellow-600' :
                                                     index === 1 ? 'bg-gray-300 text-gray-700' :
                                                         index === 2 ? 'bg-amber-600 text-amber-900' :
                                                             'bg-blue-100 text-blue-500'

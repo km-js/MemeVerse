@@ -47,7 +47,7 @@ export default function Header() {
             <Link
               href="/"
               className={`${pathname === '/'
-                ? 'font-medium text--yellow-600   dark:text-light-yellow'
+                ? 'font-medium text-yellow-600   dark:text-light-yellow'
                 : 'text-gray-600 dark:text-gray-300'
                 } hover:text-yellow-600  dark:hover:text-light-yellow transition-colors`}
             >

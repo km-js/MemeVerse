@@ -116,13 +116,13 @@ export default function MemeGallery() {
                         <div className="flex border-b border-gray-200 dark:border-gray-700">
                             <button
                                 onClick={() => setActiveTab('my-memes')}
-                                className={`py-4 px-6 font-medium text-lg ${activeTab === 'my-memes' ? 'text-vibrant-pink border-b-2 border-vibrant-pink' : 'text-gray-600 dark:text-gray-300'}`}
+                                className={`py-4 px-6 font-medium text-lg ${activeTab === 'my-memes' ? 'text-yellow-600 border-b-2 border-yellow-600' : 'text-gray-600 dark:text-gray-300'}`}
                             >
                                 My Memes
                             </button>
                             <button
                                 onClick={() => setActiveTab('liked-memes')}
-                                className={`py-4 px-6 font-medium text-lg ${activeTab === 'liked-memes' ? 'text-vibrant-pink border-b-2 border-vibrant-pink' : 'text-gray-600 dark:text-gray-300'}`}
+                                className={`py-4 px-6 font-medium text-lg ${activeTab === 'liked-memes' ? 'text-yellow-600 border-b-2 border-yellow-600' : 'text-gray-600 dark:text-gray-300'}`}
                             >
                                 Liked Memes
                             </button>
@@ -150,7 +150,7 @@ export default function MemeGallery() {
                                     <p className="text-gray-600 dark:text-gray-300 mb-6">Upload an image above to create your first meme</p>
                                     <button
                                         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                                        className="bg-vibrant-pink hover:bg-pink-700 text-white px-6 py-3 rounded-lg font-medium shadow-md"
+                                        className="bg-yellow-600 hover:bg-pink-700 text-white px-6 py-3 rounded-lg font-medium shadow-md"
                                     >
                                         Create a Meme
                                     </button>
@@ -179,7 +179,7 @@ export default function MemeGallery() {
                                     <p className="text-gray-600 dark:text-gray-300 mb-6">Like some memes to see them appear here</p>
                                     <button
                                         onClick={() => setActiveTab('my-memes')}
-                                        className="bg-vibrant-pink hover:bg-pink-700 text-white px-6 py-3 rounded-lg font-medium shadow-md"
+                                        className="bg-yellow-600 hover:bg-pink-700 text-white px-6 py-3 rounded-lg font-medium shadow-md"
                                     >
                                         Go to My Memes
                                     </button>
