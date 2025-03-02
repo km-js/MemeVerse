@@ -1,35 +1,14 @@
-// import Header from '@/components/Header';
-// import MemeCard from '@/components/MemeCard';
-// import { getTrendingMemes } from '@/utils/api';
-
-// export default async function HomePage() {
-//   const memes = await getTrendingMemes();
-//   return (
-//     <div>
-//       <Header />
-//       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-//         {memes.length > 0 ? (
-//           memes.map(meme => <MemeCard key={meme.id} meme={meme} />)
-//         ) : (
-//           <p className="col-span-full text-center">No memes found.</p>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
 'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import useLocalStorage from '@/hooks/useLocalStorage';
-
+// import useLocalStorage from '@/hooks/useLocalStorage';
 
 const Home = () => {
   // Theme state
-  const [mounted, setMounted] = useState(false);
-  const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
+  // const [mounted, setMounted] = useState(false);
+  // const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
 
   // State management
   const [trendingMemes, setTrendingMemes] = useState([]);
@@ -38,23 +17,23 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // useEffect(() => {
+  //   setMounted(true);
+  // }, []);
 
   // Toggle dark mode
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
+  // const toggleDarkMode = () => {
+  //   setDarkMode(!darkMode);
+  // };
 
   // Apply dark mode to document
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
+  // useEffect(() => {
+  //   if (darkMode) {
+  //     document.documentElement.classList.add('dark');
+  //   } else {
+  //     document.documentElement.classList.remove('dark');
+  //   }
+  // }, [darkMode]);
 
   // Fetch trending memes
   useEffect(() => {
@@ -135,34 +114,27 @@ const Home = () => {
   return (
     <div className={`min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300`}>
       {/* Navigation Bar */}
-      <nav className="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-10 transition-colors duration-300">
+      {/* <nav className="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-10 transition-colors duration-300">
         <div className="container mx-auto px-4 py-3">
           <div className="flex justify-between items-center">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2">
-              {/* <svg className="w-8 h-8 text-light-yellow" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-.464 5.879a1 1 0 01-1.415 0 3 3 0 00-4.242 0 1 1 0 01-1.415-1.415 5 5 0 017.072 0 1 1 0 010 1.415z"
-                  clipRule="evenodd"
-                />
-              </svg> */}
+      {/* <Link href="/" className="flex items-center space-x-2">
               <Image src='/logo.svg' alt="Logo" width={32} height={32} />
               <span className="text-xl font-bold text-gray-800 dark:text-white">MemeVerse</span>
-            </Link>
+            </Link> */}
 
-            {/* Navigation Links */}
-            <div className="hidden md:flex items-center space-x-6">
+      {/* Navigation Links */}
+      {/* <div className="hidden md:flex items-center space-x-6">
               <Link href="/" className="text-vibrant-pink dark:text-light-yellow font-medium">Home</Link>
               <Link href="/explore" className="text-gray-600 dark:text-gray-300 hover:text-vibrant-pink dark:hover:text-light-yellow transition-colors">Explore</Link>
               <Link href="/create" className="text-gray-600 dark:text-gray-300 hover:text-vibrant-pink dark:hover:text-light-yellow transition-colors">Create</Link>
               <Link href="/leaderboard" className="text-gray-600 dark:text-gray-300 hover:text-vibrant-pink dark:hover:text-light-yellow transition-colors">Leaderboard</Link>
-            </div>
+            </div> */}
 
-            {/* Actions */}
-            <div className="flex items-center space-x-3">
-              {/* Dark Mode Toggle */}
-              {mounted && (<button
+      {/* Actions */}
+      {/* <div className="flex items-center space-x-3"> */}
+      {/* Dark Mode Toggle */}
+      {/* {mounted && (<button
                 onClick={toggleDarkMode}
                 className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                 aria-label="Toggle Dark Mode"
@@ -181,27 +153,27 @@ const Home = () => {
                     <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
                   </svg>
                 )}
-              </button>)}
+              </button>)} */}
 
 
-              {/* Mobile Menu Button - Hidden on larger screens */}
-              <button className="md:hidden p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+      {/* Mobile Menu Button - Hidden on larger screens */}
+      {/* <button className="md:hidden p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
                 </svg>
-              </button>
+              </button> */}
 
-              {/* Explore Button */}
-              <Link
+      {/* Explore Button */}
+      {/* <Link
                 href="/explore"
-                className="hidden sm:block bg-light-yellow hover:bg-bright-blue text-black font-medium px-4 py-2 rounded-lg transition-colors"
+                className="hidden sm:block bg-light-yellow border border-vibrant-pink hover:border hover:border-transparent text-black font-medium px-4 py-2 rounded-lg transition-colors"
               >
                 Explore Memes
               </Link>
             </div>
           </div>
-        </div>
-      </nav>
+        </div> */}
+      {/* </nav>  */}
 
       <main>
         {/* Hero Section with Featured Meme */}
@@ -225,7 +197,7 @@ const Home = () => {
                 <div className="flex flex-wrap gap-4">
                   <Link
                     href="/explore"
-                    className="bg-light-yellow hover:bg-vibrant-pink text-black font-medium px-6 py-3 rounded-lg transition-colors"
+                    className="bg-light-yellow hover:bg-yellow-300 text-black font-medium px-6 py-3 rounded-lg transition-colors"
                   >
                     Start Exploring
                   </Link>
