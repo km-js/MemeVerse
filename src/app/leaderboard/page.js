@@ -82,8 +82,8 @@ export default function Leaderboard() {
                     <button
                         onClick={() => setActiveTab('topMemes')}
                         className={`px-6 py-2 rounded-md font-medium text-sm transition-all ${activeTab === 'topMemes'
-                                ? 'bg-white shadow text-blue-600'
-                                : 'text-gray-600 hover:text-gray-900'
+                            ? 'bg-white shadow text-vibrant-pink'
+                            : 'text-gray-600 hover:text-gray-900'
                             }`}
                     >
                         Top Memes
@@ -91,8 +91,8 @@ export default function Leaderboard() {
                     <button
                         onClick={() => setActiveTab('topUsers')}
                         className={`px-6 py-2 rounded-md font-medium text-sm transition-all ${activeTab === 'topUsers'
-                                ? 'bg-white shadow text-blue-600'
-                                : 'text-gray-600 hover:text-gray-900'
+                            ? 'bg-white shadow text-vibrant-pink'
+                            : 'text-gray-600 hover:text-gray-900'
                             }`}
                     >
                         Top Creators
@@ -103,7 +103,7 @@ export default function Leaderboard() {
             {/* Loading State */}
             {isLoading ? (
                 <div className="flex justify-center items-center py-20">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-vibrant-pink"></div>
                 </div>
             ) : (
                 <AnimatePresence mode="wait">
@@ -125,7 +125,7 @@ export default function Leaderboard() {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                     <p className="mt-4 text-gray-500">No memes found. Be the first to create popular content!</p>
-                                    <Link href="/create" className="mt-4 inline-block px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                                    <Link href="/create" className="mt-4 inline-block px-4 py-2 bg-vibrant-pink text-white rounded-md hover:bg-pink-800 transition-colors">
                                         Create a Meme
                                     </Link>
                                 </div>
@@ -137,7 +137,7 @@ export default function Leaderboard() {
                                         variants={itemVariants}
                                     >
                                         <div className="absolute top-3 left-3 z-10">
-                                            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 text-white font-bold shadow-lg">
+                                            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-light-yellow text-black font-bold shadow-lg">
                                                 {index + 1}
                                             </div>
                                         </div>
@@ -192,7 +192,7 @@ export default function Leaderboard() {
                             className="max-w-3xl mx-auto"
                         >
                             <div className="bg-white rounded-xl shadow-md overflow-hidden">
-                                <div className="px-4 py-5 sm:px-6 bg-gradient-to-r from-blue-500 to-purple-600">
+                                <div className="px-4 py-5 sm:px-6 bg-gradient-to-r from-vibrant-pink to-light-yellow">
                                     <h3 className="text-lg leading-6 font-medium text-white">Top Meme Creators</h3>
                                     <p className="mt-1 max-w-2xl text-sm text-blue-100">
                                         Rankings based on likes, meme count, and overall engagement
@@ -214,9 +214,9 @@ export default function Leaderboard() {
                                                 transition={{ delay: index * 0.1 }}
                                             >
                                                 <div className={`flex items-center justify-center w-8 h-8 rounded-full font-bold mr-4 ${index === 0 ? 'bg-yellow-400 text-yellow-800' :
-                                                        index === 1 ? 'bg-gray-300 text-gray-700' :
-                                                            index === 2 ? 'bg-amber-600 text-amber-900' :
-                                                                'bg-blue-100 text-blue-500'
+                                                    index === 1 ? 'bg-gray-300 text-gray-700' :
+                                                        index === 2 ? 'bg-amber-600 text-amber-900' :
+                                                            'bg-blue-100 text-blue-500'
                                                     }`}>
                                                     {index + 1}
                                                 </div>

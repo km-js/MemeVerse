@@ -33,7 +33,7 @@ export default function Header() {
   }, [darkMode]);
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-10 transition-colors duration-300">
+    <nav className="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-20 transition-colors duration-300">
       <div className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           {/* Logo */}

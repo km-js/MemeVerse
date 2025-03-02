@@ -7,6 +7,7 @@ import { useMeme } from '@/contexts/MemeContext';
 import MemeEditor from '@/components/create/MemeEditor';
 import MemePreview from '@/components/create/MemePreview';
 import AICaptionGenerator from '@/components/create/AICaptionGenerator';
+import MemeGallery from '@/components/create/MemeGallery';
 
 export default function MemeCreator() {
     // State management
@@ -155,7 +156,7 @@ export default function MemeCreator() {
             // Reset form and scroll to the My Memes tab
             resetForm();
             setActiveTab('my-memes');
-            
+
             // Smooth scroll to the memes section
             document.getElementById('memes-section').scrollIntoView({ behavior: 'smooth' });
 
@@ -175,6 +176,11 @@ export default function MemeCreator() {
         setCaptionPosition('top');
         setFontSize(32);
         setFontColor('#ffffff');
+    };
+
+    // Toggle function for the user profile section
+    const toggleProfileSection = () => {
+        setShowProfileSection(!showProfileSection);
     };
 
     const renderMeme = (meme) => {
@@ -275,6 +281,50 @@ export default function MemeCreator() {
                     </div>
                 </section> */}
 
+                <section className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-20">
+                    <div className="container mx-auto px-4 py-4">
+                        <div className="flex items-center justify-between">
+                            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                Create New Meme
+                            </h1>
+                            <div className="flex items-center space-x-4">
+                                <button
+                                    onClick={toggleProfileSection}
+                                    className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-light-yellow transition-colors"
+                                >
+                                    {!isLoading && userProfile && (
+                                        <div className="flex items-center">
+                                            <img
+                                                src={userProfile.profilePic}
+                                                alt="Profile"
+                                                className="w-8 h-8 rounded-full object-cover mr-2"
+                                            />
+                                            <span className="hidden md:inline">{userProfile.name}</span>
+                                        </div>
+                                    )}
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </button>
+                                <Link
+                                    href="/"
+                                    className="text-gray-600 dark:text-gray-300 hover:text-vibrant-pink transition-colors flex items-center"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                    <span className="hidden md:inline">Back to Home</span>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Conditionally render the User Profile section */}
+                {showProfileSection && !isLoading && (
+                    <UserProfile userProfile={userProfile} setUserProfile={setUserProfile} />
+                )}
+
                 {/* Create Meme Content */}
                 <section className="py-8">
                     <div className="container mx-auto px-4">
@@ -287,7 +337,7 @@ export default function MemeCreator() {
                             {!previewUrl ? (
                                 /* Upload Section */
                                 <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
-                                    <div 
+                                    <div
                                         ref={dropZoneRef}
                                         onDragOver={handleDragOver}
                                         onDragLeave={handleDragLeave}
@@ -324,7 +374,7 @@ export default function MemeCreator() {
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                     <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
                                         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Customize Your Meme</h3>
-                                        
+
                                         <MemeEditor
                                             caption={caption}
                                             onCaptionChange={handleCaptionChange}
@@ -354,7 +404,7 @@ export default function MemeCreator() {
 
                                     <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
                                         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Preview</h3>
-                                        
+
                                         <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
                                             <MemePreview
                                                 imageUrl={previewUrl}
@@ -425,8 +475,10 @@ export default function MemeCreator() {
                     </div>
                 </div> */}
 
+                <MemeGallery />
+
                 {/* Tab Navigation */}
-                <section id="memes-section" className="bg-white dark:bg-gray-800 shadow-md">
+                {/* <section id="memes-section" className="bg-white dark:bg-gray-800 shadow-md">
                     <div className="container mx-auto px-4">
                         <div className="max-w-6xl mx-auto">
                             <div className="flex border-b border-gray-200 dark:border-gray-700">
@@ -445,10 +497,10 @@ export default function MemeCreator() {
                             </div>
                         </div>
                     </div>
-                </section>
+                </section> */}
 
                 {/* Content Sections */}
-                <section className="py-12">
+                {/* <section className="py-12">
                     <div className="container mx-auto px-4">
                         {activeTab === 'my-memes' && (
                             <motion.div
@@ -508,7 +560,7 @@ export default function MemeCreator() {
                             </motion.div>
                         )}
                     </div>
-                </section>
+                </section> */}
             </main>
         </div>
     );
