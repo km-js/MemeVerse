@@ -47,7 +47,7 @@ export default function Header() {
             <Link
               href="/"
               className={`${pathname === '/'
-                ? 'font-medium text-vibrant-pink dark:text-light-yellow'
+                ? 'font-medium text-yellow-600 dark:text-light-yellow'
                 : 'text-gray-600 dark:text-gray-300'
                 } hover:text-vibrant-pink dark:hover:text-light-yellow transition-colors`}
             >
@@ -84,6 +84,18 @@ export default function Header() {
 
           {/* Actions */}
           <div className="flex items-center space-x-3">
+            {/* User Profile Button */}
+            <Link
+              href="/user"
+              className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              aria-label="User Profile"
+            >
+              {/* <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg> */}
+              <Image src="/user.png" alt="User" width={24} height={24} />
+            </Link>
+
             {/* Dark Mode Toggle */}
             {mounted && (<button
               onClick={toggleDarkMode}
@@ -92,17 +104,19 @@ export default function Header() {
             >
 
               {darkMode ? (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                // <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                //   <path
+                //     d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                //     fillRule="evenodd"
+                //     clipRule="evenodd"
+                //   />
+                // </svg> 
+                <Image src="/sun.png" alt="Sun" width={24} height={24} />
               ) : (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                </svg>
+                // <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                //   <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                // </svg>
+                <Image src="/moon.png" alt="Moon" width={24} height={24} />
               )}
             </button>)}
 
@@ -117,7 +131,7 @@ export default function Header() {
             {/* Explore Button */}
             <Link
               href="/explore"
-              className="hidden sm:block bg-light-yellow border border-vibrant-pink hover:border hover:border-transparent text-black font-medium px-4 py-2 rounded-lg transition-colors"
+              className="hidden sm:block bg-light-yellow border border-yellow-600 hover:border hover:border-transparent text-black font-medium px-4 py-2 rounded-lg transition-colors"
             >
               Explore Memes
             </Link>
