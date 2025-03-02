@@ -47,7 +47,7 @@ const AICaptionGenerator = ({ imageUrl, onCaptionGenerated }) => {
         whileTap={{ scale: 0.98 }}
         onClick={generateCaptions}
         disabled={isLoading || !imageUrl}
-        className="w-full bg-blue-500 text-white py-2 rounded-md disabled:bg-blue-300"
+        className="w-full bg-gradient-to-r from-vibrant-pink to-light-yellow text-black py-2 rounded-md disabled:bg-blue-300"
       >
         {isLoading ? 'Generating...' : 'Generate AI Captions'}
       </motion.button>

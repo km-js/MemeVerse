@@ -24,14 +24,14 @@ export default function CommentSection({ id }) {
 
             <div className="mb-4">
                 <textarea
-                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     rows={3}
                     placeholder="Add a comment..."
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
                 ></textarea>
                 <motion.button
-                    className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                    className="mt-2 px-4 py-2 bg-yellow-500 text-black rounded-lg hover:bg-yellow-600 transition"
                     onClick={handleAddComment}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}

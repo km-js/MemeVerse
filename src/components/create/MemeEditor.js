@@ -19,7 +19,7 @@ const MemeEditor = ({
         <textarea
           value={caption}
           onChange={onCaptionChange}
-          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
           rows="3"
           placeholder="Enter your meme caption here..."
         />
@@ -33,7 +33,7 @@ const MemeEditor = ({
               key={position}
               onClick={() => onPositionChange(position)}
               className={`px-4 py-2 rounded-md ${captionPosition === position
-                  ? 'bg-purple-500 text-white'
+                  ? 'bg-light-yellow text-black'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
             >

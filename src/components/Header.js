@@ -47,36 +47,36 @@ export default function Header() {
             <Link
               href="/"
               className={`${pathname === '/'
-                ? 'font-medium text-yellow-600 dark:text-light-yellow'
+                ? 'font-medium text--yellow-600   dark:text-light-yellow'
                 : 'text-gray-600 dark:text-gray-300'
-                } hover:text-vibrant-pink dark:hover:text-light-yellow transition-colors`}
+                } hover:text-yellow-600  dark:hover:text-light-yellow transition-colors`}
             >
               Home
             </Link>
             <Link
               href="/explore"
               className={`${pathname === '/explore'
-                ? 'font-medium text-vibrant-pink dark:text-light-yellow'
+                ? 'font-medium text-yellow-600  dark:text-light-yellow'
                 : 'text-gray-600 dark:text-gray-300'
-                } hover:text-vibrant-pink dark:hover:text-light-yellow transition-colors`}
+                } hover:text-yellow-600  dark:hover:text-light-yellow transition-colors`}
             >
               Explore
             </Link>
             <Link
               href="/create"
               className={`${pathname === '/create'
-                ? 'font-medium text-vibrant-pink dark:text-light-yellow'
+                ? 'font-medium text-yellow-600  dark:text-light-yellow'
                 : 'text-gray-600 dark:text-gray-300'
-                } hover:text-vibrant-pink dark:hover:text-light-yellow transition-colors`}
+                } hover:text-yellow-600  dark:hover:text-light-yellow transition-colors`}
             >
               Create
             </Link>
             <Link
               href="/leaderboard"
               className={`${pathname === '/leaderboard'
-                ? 'font-medium text-vibrant-pink dark:text-light-yellow'
+                ? 'font-medium text-yellow-600  dark:text-light-yellow'
                 : 'text-gray-600 dark:text-gray-300'
-                } hover:text-vibrant-pink dark:hover:text-light-yellow transition-colors`}
+                } hover:text-yellow-600  dark:hover:text-light-yellow transition-colors`}
             >
               Leaderboard
             </Link>
@@ -131,7 +131,7 @@ export default function Header() {
             {/* Explore Button */}
             <Link
               href="/explore"
-              className="hidden sm:block bg-light-yellow border border-yellow-600 hover:border hover:border-transparent text-black font-medium px-4 py-2 rounded-lg transition-colors"
+              className="hidden sm:block bg-light-yellow border border--yellow-600   hover:border hover:border-transparent text-black font-medium px-4 py-2 rounded-lg transition-colors"
             >
               Explore Memes
             </Link>

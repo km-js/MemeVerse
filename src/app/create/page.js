@@ -163,7 +163,7 @@ export default function MemeCreator() {
             resetForm();
 
             // Navigate to the user page
-            router.push('/user');
+            // router.push('/user');
 
         } catch (error) {
             console.error('Error uploading meme:', error);

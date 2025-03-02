@@ -197,7 +197,7 @@ const Home = () => {
                 <div className="flex flex-wrap gap-4">
                   <Link
                     href="/explore"
-                    className="bg-light-yellow hover:bg-yellow-300 text-black font-medium px-6 py-3 rounded-lg transition-colors"
+                    className="bg-vibrant-pink hover:bg-pink-300 text-white font-medium px-6 py-3 rounded-lg transition-colors"
                   >
                     Start Exploring
                   </Link>
