@@ -8,6 +8,7 @@ import MemeEditor from '@/components/create/MemeEditor';
 import MemePreview from '@/components/create/MemePreview';
 import AICaptionGenerator from '@/components/create/AICaptionGenerator';
 import MemeGallery from '@/components/create/MemeGallery';
+import { useRouter } from 'next/navigation'
 
 export default function MemeCreator() {
     // State management
@@ -23,6 +24,8 @@ export default function MemeCreator() {
     const dropZoneRef = useRef(null);
 
     const { memes, addMeme, getLikedMemes, likes, toggleLike, deleteMeme } = useMeme();
+
+    const router = useRouter();
 
     // Animation variants
     const containerVariants = {
@@ -139,8 +142,11 @@ export default function MemeCreator() {
             // Get the hosted image URL from ImgBB response
             const hostedImageUrl = data.data.url;
 
+            // Generate a unique ID for the new meme
+            const newMemeId = Date.now().toString();
+
             const newMeme = {
-                id: Date.now().toString(),
+                id: newMemeId,
                 imageUrl: hostedImageUrl,
                 caption,
                 captionPosition,
@@ -153,14 +159,12 @@ export default function MemeCreator() {
             // Add to Context state
             addMeme(newMeme);
 
-            // Reset form and scroll to the My Memes tab
+            // Reset form
             resetForm();
-            setActiveTab('my-memes');
 
-            // Smooth scroll to the memes section
-            document.getElementById('memes-section').scrollIntoView({ behavior: 'smooth' });
+            // Navigate to the user page
+            router.push('/user');
 
-            alert('Meme uploaded successfully!');
         } catch (error) {
             console.error('Error uploading meme:', error);
             alert('Error uploading meme: ' + (error.message || 'Please try again.'));
@@ -168,6 +172,67 @@ export default function MemeCreator() {
             setIsUploading(false);
         }
     };
+
+    // const handleUpload = async () => {
+    //     if (!selectedFile || !caption) {
+    //         alert('Please select an image and add a caption');
+    //         return;
+    //     }
+
+    //     setIsUploading(true);
+
+    //     try {
+    //         // Create FormData to send the image to ImgBB
+    //         const formData = new FormData();
+    //         formData.append('image', selectedFile);
+
+    //         // Replace with your ImgBB API key
+    //         formData.append('key', process.env.NEXT_PUBLIC_IMGBB_API_KEY);
+
+    //         // Upload to ImgBB
+    //         const response = await fetch('https://api.imgbb.com/1/upload', {
+    //             method: 'POST',
+    //             body: formData
+    //         });
+
+    //         const data = await response.json();
+
+    //         if (!data.success) {
+    //             throw new Error(data.error?.message || 'Upload failed');
+    //         }
+
+    //         // Get the hosted image URL from ImgBB response
+    //         const hostedImageUrl = data.data.url;
+
+    //         const newMeme = {
+    //             id: Date.now().toString(),
+    //             imageUrl: hostedImageUrl,
+    //             caption,
+    //             captionPosition,
+    //             fontSize,
+    //             fontColor,
+    //             createdAt: new Date().toISOString(),
+    //             deleteUrl: data.data.delete_url
+    //         };
+
+    //         // Add to Context state
+    //         addMeme(newMeme);
+
+    //         // Reset form and scroll to the My Memes tab
+    //         resetForm();
+    //         setActiveTab('my-memes');
+
+    //         // Smooth scroll to the memes section
+    //         document.getElementById('memes-section').scrollIntoView({ behavior: 'smooth' });
+
+    //         alert('Meme uploaded successfully!');
+    //     } catch (error) {
+    //         console.error('Error uploading meme:', error);
+    //         alert('Error uploading meme: ' + (error.message || 'Please try again.'));
+    //     } finally {
+    //         setIsUploading(false);
+    //     }
+    // };
 
     const resetForm = () => {
         setSelectedFile(null);
@@ -281,7 +346,7 @@ export default function MemeCreator() {
                     </div>
                 </section> */}
 
-                <section className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-20">
+                {/* <section className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-20">
                     <div className="container mx-auto px-4 py-4">
                         <div className="flex items-center justify-between">
                             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -318,12 +383,12 @@ export default function MemeCreator() {
                             </div>
                         </div>
                     </div>
-                </section>
+                </section> */}
 
                 {/* Conditionally render the User Profile section */}
-                {showProfileSection && !isLoading && (
+                {/* {showProfileSection && !isLoading && (
                     <UserProfile userProfile={userProfile} setUserProfile={setUserProfile} />
-                )}
+                )} */}
 
                 {/* Create Meme Content */}
                 <section className="py-8">
