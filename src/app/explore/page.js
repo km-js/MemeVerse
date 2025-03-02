@@ -6,30 +6,26 @@ import { debounce } from 'lodash';
 import useLocalStorage from '@/hooks/useLocalStorage';
 
 export default function MemeExplorer() {
-    //states
+    // States
     const [memes, setMemes] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [page, setPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [category, setCategory] = useState('trending');
     const [sortBy, setSortBy] = useState('likes');
-    const [viewMode, setViewMode] = useState('infinite'); // 'infinite' or 'pagination'
     const [cachedMemes, setCachedMemes] = useLocalStorage('cachedMemes', {});
     const [darkMode, setDarkMode] = useState(false);
-    const [favoriteMemes, setFavoriteMemes] = useLocalStorage('favoriteMemes', []);
-    const [showFavorites, setShowFavorites] = useState(false);
     const [showFilters, setShowFilters] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(false);
 
-    //refs
+    // Refs
     const observer = useRef();
     const searchInputRef = useRef(null);
 
     // Categories with emojis
     const categories = [
         { id: 'trending', name: 'Trending', emoji: '🔥' },
-        { id: 'new', name: 'Fresh Memes', emoji: '✨' },
+        { id: 'new', name: 'Fresh', emoji: '✨' },
         { id: 'classic', name: 'Classics', emoji: '🏆' },
         { id: 'random', name: 'Random', emoji: '🎲' }
     ];
@@ -41,41 +37,52 @@ export default function MemeExplorer() {
         { value: 'comments', label: '💬 Most Comments' }
     ];
 
-    //debounced search function
+    useEffect(() => {
+        const checkDesktop = () => setIsDesktop(window.innerWidth >= 768);
+        checkDesktop();
+        window.addEventListener('resize', checkDesktop);
+        return () => window.removeEventListener('resize', checkDesktop);
+    }, []);
+
+    // useEffect(() => {
+    //     if (filteredMemes.length > 0) {
+    //         const enhancedMemes = filteredMemes.map(meme => ({
+    //             ...meme,
+    //             likes: Math.floor(Math.random() * 50) + 1,
+    //             comments: Math.floor(Math.random() * 20) + 1,
+    //             daysAgo: Math.floor(Math.random() * 30) + 1,
+    //         }));
+    //         setMemes(enhancedMemes);
+    //     }
+    // }, [filteredMemes]);
+
+    // Debounced search function
+
     const debouncedSearch = useCallback(
         debounce((query) => {
-            setPage(1);
             setMemes([]);
-            fetchMemes(1, query, category, sortBy);
+            fetchMemes(query, category, sortBy);
         }, 500),
         [category, sortBy]
     );
 
     // API call to fetch memes
-    const fetchMemes = async (pageNum, query = searchQuery, cat = category, sort = sortBy) => {
-        if (showFavorites) {
-            // When showing favorites, filter from the favorites list
-            setMemes(favoriteMemes);
-            setHasMore(false);
-            setLoading(false);
-            return;
-        }
-
+    const fetchMemes = async (query = searchQuery, cat = category, sort = sortBy) => {
         setLoading(true);
         setError(null);
 
-        //Create cache key based on parameters
-        const cacheKey = `${cat}-${sort}-${query}-${pageNum}`;
+        // Create cache key based on parameters
+        const cacheKey = `${cat}-${sort}-${query}`;
 
-        //check if we have cached data
+        // Check if we have cached data
         if (cachedMemes[cacheKey]) {
-            setMemes(prevMemes => pageNum === 1 ? cachedMemes[cacheKey] : [...prevMemes, ...cachedMemes[cacheKey]]);
+            setMemes(cachedMemes[cacheKey]);
             setLoading(false);
             return;
         }
 
         try {
-            //base URL for Imgflip API
+            // Base URL for Imgflip API
             let url = 'https://api.imgflip.com/get_memes';
 
             const response = await fetch(url);
@@ -87,7 +94,7 @@ export default function MemeExplorer() {
 
             let filteredMemes = data.data.memes;
 
-            //simulating filtering by category
+            // Simulating filtering by category
             if (cat === 'trending') {
                 filteredMemes = filteredMemes.slice(0, 10);
             } else if (cat === 'new') {
@@ -98,14 +105,14 @@ export default function MemeExplorer() {
                 filteredMemes = filteredMemes.sort(() => 0.5 - Math.random());
             }
 
-            //simulating search
+            // Simulating search
             if (query) {
                 filteredMemes = filteredMemes.filter(meme =>
                     meme.name.toLowerCase().includes(query.toLowerCase())
                 );
             }
 
-            // Add random metrics for UI enhancements - FIXED: More reasonable values
+            // Add random metrics for UI enhancements
             const enhancedMemes = filteredMemes.map(meme => ({
                 ...meme,
                 likes: Math.floor(Math.random() * 50) + 1,  // 1-50 likes
@@ -113,7 +120,7 @@ export default function MemeExplorer() {
                 daysAgo: Math.floor(Math.random() * 30) + 1, // 1-30 days ago
             }));
 
-            //simulating sorting - FIXED: Using the enhanced metrics properly
+            // Simulating sorting based on the enhanced metrics
             if (sort === 'likes') {
                 enhancedMemes.sort((a, b) => b.likes - a.likes);
             } else if (sort === 'date') {
@@ -122,15 +129,14 @@ export default function MemeExplorer() {
                 enhancedMemes.sort((a, b) => b.comments - a.comments);
             }
 
-            //cache the results
+            // Cache the results
             setCachedMemes(prev => ({
                 ...prev,
                 [cacheKey]: enhancedMemes
             }));
 
-            //update state
-            setMemes(prevMemes => pageNum === 1 ? enhancedMemes : [...prevMemes, ...enhancedMemes]);
-            setHasMore(enhancedMemes.length > 0);
+            // Update state
+            setMemes(enhancedMemes);
 
         } catch (err) {
             setError(err.message);
@@ -140,59 +146,31 @@ export default function MemeExplorer() {
         }
     };
 
-    // Toggle favorite status
-    const toggleFavorite = (meme) => {
-        const memeId = meme.id;
-        if (favoriteMemes.some(m => m.id === memeId)) {
-            setFavoriteMemes(favoriteMemes.filter(m => m.id !== memeId));
-        } else {
-            setFavoriteMemes([...favoriteMemes, meme]);
-        }
-    };
-
-    // Check if a meme is favorited
-    const isFavorite = (memeId) => {
-        return favoriteMemes.some(m => m.id === memeId);
-    };
-
-    //handle intersection observer for infinite scrolling
+    // Handle intersection observer for infinite scrolling
     const lastMemeElementRef = useCallback(node => {
         if (loading) return;
 
         if (observer.current) observer.current.disconnect();
 
         observer.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMore && viewMode === 'infinite') {
-                setPage(prevPage => prevPage + 1);
+            if (entries[0].isIntersecting) {
+                // Load more memes if needed in the future
             }
         });
 
         if (node) observer.current.observe(node);
-    }, [loading, hasMore, viewMode]);
+    }, [loading]);
 
     useEffect(() => {
         setMemes([]);
-        setPage(1);
-        fetchMemes(1);
-    }, [category, sortBy, showFavorites]);
+        fetchMemes();
+    }, [category, sortBy]);
 
-    //fetch on page change for infinite scroll
-    useEffect(() => {
-        if (page > 1 && viewMode === 'infinite' && !showFavorites) {
-            fetchMemes(page);
-        }
-    }, [page, viewMode]);
-
-    //handle search input change
+    // Handle search input change
     const handleSearchChange = (e) => {
         const query = e.target.value;
         setSearchQuery(query);
         debouncedSearch(query);
-    };
-
-
-    const handleToggleFavorites = () => {
-        setShowFavorites(!showFavorites);
     };
 
     // Clear search
@@ -204,7 +182,12 @@ export default function MemeExplorer() {
         }
     };
 
-    //animation variants for Framer Motion
+    // Toggle dark mode
+    const toggleDarkMode = () => {
+        setDarkMode(!darkMode);
+    };
+
+    // Animation variants for Framer Motion
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -254,11 +237,24 @@ export default function MemeExplorer() {
     return (
         <div className={`min-h-screen ${darkMode ? 'dark' : ''} bg-gray-50 dark:bg-gray-900 transition-colors duration-300`}>
             {/* Header Section */}
-            <header className="bg-white dark:bg-gray-800 shadow-lg top-0 z-10 transition-all">
+            <header className="bg-white dark:bg-gray-800 shadow-lg  top-0 z-10 transition-all">
                 <div className="container mx-auto px-4 py-4">
+                    {/* App Title and Dark Mode Toggle */}
+                    {/* <div className="flex justify-between items-center">
+                        <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                            <span className="mr-2">🖼️</span>Meme Explorer
+                        </h1>
+                        <button 
+                            onClick={toggleDarkMode}
+                            className="p-2 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors"
+                            aria-label="Toggle dark mode"
+                        >
+                            {darkMode ? '☀️' : '🌙'}
+                        </button>
+                    </div> */}
 
                     {/* Search Bar */}
-                    <div className={`mt-4 relative transition-all duration-300`}>
+                    <div className="mt-4 relative transition-all duration-300">
                         <input
                             ref={searchInputRef}
                             type="text"
@@ -279,9 +275,18 @@ export default function MemeExplorer() {
                         )}
                     </div>
 
+                    {/* Toggle Filters Button (Mobile) */}
+                    <button
+                        className="md:hidden mt-4 w-full py-2 px-4 bg-blue-500 text-white rounded-lg flex items-center justify-center"
+                        onClick={() => setShowFilters(!showFilters)}
+                    >
+                        <span>{showFilters ? 'Hide Filters' : 'Show Filters'}</span>
+                        <span className="ml-2">{showFilters ? '▲' : '▼'}</span>
+                    </button>
+
                     {/* Filters and Controls */}
                     <AnimatePresence>
-                        {(showFilters || window.innerWidth >= 768) && (
+                        {(showFilters || isDesktop) && (
                             <motion.div
                                 variants={filterVariants}
                                 initial="hidden"
@@ -301,44 +306,29 @@ export default function MemeExplorer() {
                                                     : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
                                                     } transition-colors shadow-sm`}
                                             >
-                                                <span className="mr-1">{cat.emoji}</span> {cat.name.split(' ')[0]}
+                                                <span className="mr-1">{cat.emoji}</span> {cat.name}
                                             </button>
                                         ))}
                                     </div>
 
-                                    {/* Sort and View Controls */}
-                                    <div className="flex items-center gap-3 w-full md:w-auto">
-                                        {/* Sort Dropdown - FIXED: Not showing blue background when selected */}
-                                        <div className="relative flex-grow md:flex-grow-0">
-                                            <select
-                                                value={sortBy}
-                                                onChange={(e) => setSortBy(e.target.value)}
-                                                className="appearance-none w-full md:w-auto bg-white dark:bg-gray-700 border border-gray-300 
-                                                dark:border-gray-600 text-gray-800 dark:text-white rounded-lg py-2 
-                                                pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
-                                            >
-                                                {sortOptions.map(option => (
-                                                    <option key={option.value} value={option.value}>{option.label}</option>
-                                                ))}
-                                            </select>
-                                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                                                </svg>
-                                            </div>
-                                        </div>
-
-                                        {/* Favorites Toggle Button */}
-                                        <button
-                                            onClick={handleToggleFavorites}
-                                            className={`px-4 py-2 rounded-full font-medium ${showFavorites
-                                                ? 'bg-pink-500 hover:bg-pink-600 text-white'
-                                                : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
-                                                } transition-colors shadow-sm`}
+                                    {/* Sort Control */}
+                                    <div className="relative w-full md:w-auto">
+                                        <select
+                                            value={sortBy}
+                                            onChange={(e) => setSortBy(e.target.value)}
+                                            className="appearance-none w-full bg-white dark:bg-gray-700 border border-gray-300 
+                                            dark:border-gray-600 text-gray-800 dark:text-white rounded-lg py-2 
+                                            pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
                                         >
-                                            <span className="mr-1">{showFavorites ? '❤️' : '🤍'}</span>
-                                            {showFavorites ? 'Favorites' : 'Favorites'}
-                                        </button>
+                                            {sortOptions.map(option => (
+                                                <option key={option.value} value={option.value}>{option.label}</option>
+                                            ))}
+                                        </select>
+                                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </div>
                                     </div>
                                 </div>
                             </motion.div>
@@ -351,17 +341,15 @@ export default function MemeExplorer() {
             <main className="container mx-auto px-4 py-6">
                 {/* Category Description */}
                 <div className="mb-6">
-                    {showFavorites ? (
-                        <div className="flex items-center space-x-2 text-lg font-medium text-gray-700 dark:text-gray-300">
-                            <span className="text-2xl">❤️</span>
-                            <h2>Your Favorite Memes ({favoriteMemes.length})</h2>
-                        </div>
-                    ) : (
-                        <div className="flex items-center space-x-2 text-lg font-medium text-gray-700 dark:text-gray-300">
-                            <span className="text-2xl">{categories.find(cat => cat.id === category)?.emoji}</span>
-                            <h2>{categories.find(cat => cat.id === category)?.name}</h2>
-                        </div>
-                    )}
+                    <div className="flex items-center space-x-2 text-lg font-medium text-gray-700 dark:text-gray-300">
+                        <span className="text-2xl">{categories.find(cat => cat.id === category)?.emoji}</span>
+                        <h2>{categories.find(cat => cat.id === category)?.name}</h2>
+                        {searchQuery && (
+                            <span className="ml-2 text-base font-normal">
+                                - Results for "{searchQuery}"
+                            </span>
+                        )}
+                    </div>
                 </div>
 
                 {/* Status Messages */}
@@ -372,39 +360,17 @@ export default function MemeExplorer() {
                 )}
 
                 {/* Empty States */}
-                {memes.length === 0 && !loading && !error && (
+                {memes.length === 0 && !loading && !error && searchQuery && (
                     <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-xl shadow-md">
-                        {showFavorites ? (
-                            <>
-                                <span className="mx-auto text-6xl mb-4 block">💔</span>
-                                <h3 className="text-xl font-medium text-gray-900 dark:text-gray-100">No favorite memes yet</h3>
-                                <p className="mt-2 text-gray-500 dark:text-gray-400">Click the heart icon on memes you love to save them here</p>
-                                <button
-                                    onClick={() => setShowFavorites(false)}
-                                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                                >
-                                    Browse Memes
-                                </button>
-                            </>
-                        ) : searchQuery ? (
-                            <>
-                                <span className="mx-auto text-6xl mb-4 block">🔍</span>
-                                <h3 className="text-xl font-medium text-gray-900 dark:text-gray-100">No memes found for "{searchQuery}"</h3>
-                                <p className="mt-2 text-gray-500 dark:text-gray-400">Try a different search or browse categories</p>
-                                <button
-                                    onClick={clearSearch}
-                                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                                >
-                                    Clear Search
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <span className="mx-auto text-6xl mb-4 block">🤔</span>
-                                <h3 className="text-xl font-medium text-gray-900 dark:text-gray-100">No memes found</h3>
-                                <p className="mt-2 text-gray-500 dark:text-gray-400">Try changing your filters</p>
-                            </>
-                        )}
+                        <span className="mx-auto text-6xl mb-4 block">🔍</span>
+                        <h3 className="text-xl font-medium text-gray-900 dark:text-gray-100">No memes found for "{searchQuery}"</h3>
+                        <p className="mt-2 text-gray-500 dark:text-gray-400">Try a different search or browse categories</p>
+                        <button
+                            onClick={clearSearch}
+                            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                        >
+                            Clear Search
+                        </button>
                     </div>
                 )}
 
@@ -417,9 +383,8 @@ export default function MemeExplorer() {
                         animate="visible"
                     >
                         {memes.map((meme, index) => {
-                            // Add ref to last element for infinite scroll
+                            // Add ref to last element for potential future infinite scroll
                             const isLastElement = index === memes.length - 1;
-                            const favorite = isFavorite(meme.id);
 
                             return (
                                 <motion.div
@@ -427,33 +392,17 @@ export default function MemeExplorer() {
                                     ref={isLastElement ? lastMemeElementRef : null}
                                     variants={itemVariants}
                                     className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl 
-                                transition-all duration-300 flex flex-col group relative"
+                                    transition-all duration-300 flex flex-col group relative"
                                 >
                                     {/* Meme Image with Link */}
-                                    <Link href={`/meme/${meme.id}`} className="block overflow-hidden aspect-square bg-gray-200 dark:bg-gray-700 relative">
+                                    <Link href={`/meme/${meme.id}`} className="block overflow-hidden bg-gray-200 dark:bg-gray-700 relative">
                                         <img
                                             src={meme.url}
                                             alt={meme.name}
-                                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                            className="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-105"
                                             loading="lazy"
                                         />
                                     </Link>
-
-                                    {/* Favorite Button */}
-                                    <button
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            toggleFavorite(meme);
-                                        }}
-                                        className={`absolute top-3 right-3 p-2 rounded-full ${favorite
-                                            ? 'bg-pink-100 text-pink-600 dark:bg-pink-900 dark:text-pink-300'
-                                            : 'bg-gray-100 bg-opacity-70 text-gray-600 dark:bg-gray-800 dark:bg-opacity-70 dark:text-gray-300'} 
-                                            transition-all duration-200 transform hover:scale-110 shadow-md`}
-                                        aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
-                                    >
-                                        {favorite ? '❤️' : '🤍'}
-                                    </button>
 
                                     {/* Meme Info */}
                                     <div className="p-4 flex-grow flex flex-col">
@@ -463,21 +412,21 @@ export default function MemeExplorer() {
                                             </h3>
                                         </Link>
 
-                                        {/* Metrics - FIXED: Removed 'k' suffix, uses proper values */}
-                                        <div className="mt-auto flex justify-between text-sm text-gray-500 dark:text-gray-400">
+                                        {/* Metrics */}
+                                        <div className="mt-auto flex justify-between text-sm text-gray-500 dark:text-gray-400 suppressHydrationWarning">
                                             <div className="flex items-center">
                                                 <span className="mr-1">❤️</span>
-                                                {meme.likes || 0}
+                                                <span className="font-medium">{meme.likes}</span>
                                             </div>
 
                                             <div className="flex items-center">
                                                 <span className="mr-1">💬</span>
-                                                {meme.comments || 0}
+                                                <span className="font-medium">{meme.comments}</span>
                                             </div>
 
                                             <div className="flex items-center">
                                                 <span className="mr-1">⏱️</span>
-                                                {meme.daysAgo || 0}d
+                                                <span className="font-medium">{meme.daysAgo}d</span>
                                             </div>
                                         </div>
                                     </div>
@@ -495,6 +444,15 @@ export default function MemeExplorer() {
                             <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl">🤣</span>
                         </div>
                         <p className="text-gray-600 dark:text-gray-300 animate-pulse font-medium">{getLoadingMessage()}</p>
+                    </div>
+                )}
+
+                {/* No Results Message */}
+                {memes.length === 0 && !loading && !error && !searchQuery && (
+                    <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-xl shadow-md">
+                        <span className="mx-auto text-6xl mb-4 block">🤔</span>
+                        <h3 className="text-xl font-medium text-gray-900 dark:text-gray-100">No memes found</h3>
+                        <p className="mt-2 text-gray-500 dark:text-gray-400">Try changing your filters</p>
                     </div>
                 )}
             </main>
