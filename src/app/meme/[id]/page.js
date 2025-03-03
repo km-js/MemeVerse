@@ -7,13 +7,13 @@ import { getMemeById } from '@/utils/memeApi';
 import { useParams } from 'next/navigation';
 
 export default function MemePage() {
-    const { setCurrentMeme, getMemeById: getLocalMeme, currentMeme } = useMeme();
+    const { memes,setCurrentMeme, currentMeme } = useMeme();
     const routeParams = useParams(); // Returns an object with route parameters
     const id = routeParams.id; // Extract the `id` from route parameters
 
     useEffect(() => {
         // First try to get meme from local context
-        const localMeme = getLocalMeme(id);
+        const localMeme = memes.find(meme => meme.id === id);
 
         if (localMeme) {
             // Only update if the local meme is different from the current meme
@@ -38,5 +38,5 @@ export default function MemePage() {
         };
     }, [id]); // Only re-run when `id` changes
 
-    return <MemeDetails id={id} memeName={currentMeme?.name} />;
+    return <MemeDetails id={currentMeme?.id} memeName={currentMeme?.name} />;
 }

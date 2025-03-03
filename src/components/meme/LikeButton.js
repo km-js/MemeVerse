@@ -1,37 +1,64 @@
 'use client'
-
 import { motion } from 'framer-motion';
 import { useMeme } from '@/contexts/MemeContext';
+import { useState } from 'react';
 
 export default function LikeButton({ id }) {
-    const { likes, toggleLike } = useMeme();
+  const { memes, userMemes, toggleLike } = useMeme();
+  const [isAnimating, setIsAnimating] = useState(false);
 
-    // Get like info for this meme
-    const likeInfo = likes[id] || { liked: false, count: 0 };
-    const { liked, count } = likeInfo;
+  // Find the meme in both memes and userMemes arrays
+  const currentMeme = [...memes, ...userMemes].find(meme => meme.id === id);
+  const hasLiked = currentMeme?.hasLiked || false;
+  const likesCount = currentMeme?.likes || 0;
 
-    return (
-        <motion.button
-            onClick={() => toggleLike(id)}
-            className="flex items-center space-x-2"
-            whileHover={{ scale: 1.05 }}
+  const handleLike = () => {
+    setIsAnimating(true);
+    toggleLike(id);
+    setTimeout(() => setIsAnimating(false), 500);
+  };
+
+  return (
+    <motion.button
+      onClick={handleLike}
+      className="flex items-center gap-2 group focus:outline-none"
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      <div className="relative">
+        <motion.div
+          animate={isAnimating ? 
+            { scale: [1, 1.5, 1], rotate: [0, 15, -15, 0] } : 
+            {}
+          }
+          transition={{ duration: 0.5 }}
+          className="relative"
         >
-            <motion.div
-                whileTap={{ scale: 0.8 }}
-                animate={liked ? { scale: [1, 1.2, 1] } : {}}
-                transition={{ duration: 0.3 }}
-            >
-                {liked ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                    </svg>
-                ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                )}
-            </motion.div>
-            <span className={liked ? "text-red-500" : "text-gray-500"}>{count}</span>
-        </motion.button>
-    );
+          {hasLiked ? (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-7 w-7 text-red-500 fill-current">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-7 w-7 text-gray-400 group-hover:text-red-500 transition-colors duration-300">
+              <path fill="none" stroke="currentColor" strokeWidth="2" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            </svg>
+          )}
+        </motion.div>
+
+        {isAnimating && hasLiked && (
+          <motion.div
+            initial={{ scale: 0, opacity: 1 }}
+            animate={{ scale: 1.8, opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0 bg-red-500 rounded-full"
+            style={{ zIndex: -1 }}
+          />
+        )}
+      </div>
+
+      <span className={`font-medium text-sm ${hasLiked ? "text-red-500" : "text-gray-500"}`}>
+        {likesCount > 0 ? (likesCount > 999 ? `${(likesCount/1000).toFixed(1)}k` : likesCount) : "Like"}
+      </span>
+    </motion.button>
+  );
 }
