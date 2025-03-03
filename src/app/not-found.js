@@ -16,54 +16,58 @@ export default function Custom404() {
     // Collection of funny 404 meme data with emoji pairs
     const memes404 = [
         {
-            imageUrl: '/images/404/confused-travolta.gif',
+            // imageUrl: '/images/404/confused-travolta.gif',
+            imageUrl: 'https://media1.tenor.com/m/s3mSfN97IMAAAAAC/john-travolta-kuddelzwerg.gif',
             caption: "Looking for a page that doesn't exist",
             altText: "Confused John Travolta looking around meme",
             emoji: '🤷‍♂️',
             id: 'travolta'
         },
         {
-            imageUrl: '/images/404/surprised-pikachu.jpg',
+            // imageUrl: '/images/404/surprised-pikachu.jpg',
+            imageUrl: 'https://media1.tenor.com/m/ZhKMg4_yCTgAAAAC/surprised-pikachu.gif',
             caption: "When you realize the URL doesn't exist",
             altText: "Surprised Pikachu meme",
             emoji: '😮',
             id: 'pikachu'
         },
         {
-            imageUrl: '/images/404/this-is-fine.jpg',
+            // imageUrl: '/images/404/this-is-fine.jpg',
+            imageUrl: 'https://media1.tenor.com/m/5BOVutzvWJgAAAAC/shmorky-this-is-fine.gif',
             caption: "404 error. This is fine.",
             altText: "This is fine dog meme",
             emoji: '🔥',
             id: 'this-is-fine'
         },
         {
-            imageUrl: '/images/404/homer-bush.gif',
+            // imageUrl: '/images/404/homer-bush.gif',
+            imageUrl: 'https://media1.tenor.com/m/XcW2X_rp2PUAAAAC/simpsonovi-simpsons.gif',
             caption: "The page you're looking for disappeared like...",
             altText: "Homer Simpson disappearing into bushes meme",
             emoji: '🌳',
             id: 'homer'
         },
-        {
-            imageUrl: '/images/404/what-year-is-it.jpg',
-            caption: "Finding a 404 page in 2025",
-            altText: "What year is it Robin Williams Jumanji meme",
-            emoji: '📅',
-            id: 'jumanji'
-        },
-        {
-            imageUrl: '/images/404/fry-not-sure.jpg',
-            caption: "Not sure if wrong URL or website broken",
-            altText: "Futurama Fry squinting meme",
-            emoji: '🤔',
-            id: 'fry'
-        },
-        {
-            imageUrl: '/images/404/awkward-seal.jpg',
-            caption: "When you click a link and get 404'd",
-            altText: "Awkward seal meme",
-            emoji: '😬',
-            id: 'seal'
-        },
+        // {
+        //     imageUrl: '/images/404/what-year-is-it.jpg',
+        //     caption: "Finding a 404 page in 2025",
+        //     altText: "What year is it Robin Williams Jumanji meme",
+        //     emoji: '📅',
+        //     id: 'jumanji'
+        // },
+        // {
+        //     imageUrl: '/images/404/fry-not-sure.jpg',
+        //     caption: "Not sure if wrong URL or website broken",
+        //     altText: "Futurama Fry squinting meme",
+        //     emoji: '🤔',
+        //     id: 'fry'
+        // },
+        // {
+        //     imageUrl: '/images/404/awkward-seal.jpg',
+        //     caption: "When you click a link and get 404'd",
+        //     altText: "Awkward seal meme",
+        //     emoji: '😬',
+        //     id: 'seal'
+        // },
     ]
 
     // Fallback images with meme styling
@@ -73,13 +77,6 @@ export default function Custom404() {
     const getRandomMeme = () => {
         let availableMemes = memes404
 
-        // If we've already collected some memes, filter them out
-        if (collectedMemes.length > 0 && collectedMemes.length < memes404.length) {
-            availableMemes = memes404.filter(meme =>
-                !collectedMemes.some(collected => collected.id === meme.id)
-            )
-        }
-
         const randomIndex = Math.floor(Math.random() * availableMemes.length)
         const selectedMeme = availableMemes[randomIndex]
 
@@ -88,48 +85,48 @@ export default function Custom404() {
     }
 
     // Start the catch emoji game
-    const startGame = () => {
-        setGameActive(true)
-        setScore(0)
+    // const startGame = () => {
+    //     setGameActive(true)
+    //     setScore(0)
 
-        // Add the current meme to collection if not already there
-        if (randomMeme && !collectedMemes.some(meme => meme.id === randomMeme.id)) {
-            setCollectedMemes([...collectedMemes, randomMeme])
-        }
-    }
+    //     // Add the current meme to collection if not already there
+    //     if (randomMeme && !collectedMemes.some(meme => meme.id === randomMeme.id)) {
+    //         setCollectedMemes([...collectedMemes, randomMeme])
+    //     }
+    // }
 
     // Handle game click
-    const handleGameClick = (e) => {
-        if (!gameActive) return
+    // const handleGameClick = (e) => {
+    //     if (!gameActive) return
 
-        const gameArea = gameRef.current
-        if (!gameArea) return
+    //     const gameArea = gameRef.current
+    //     if (!gameArea) return
 
-        // Create a falling emoji
-        const emojiElem = document.createElement('div')
-        emojiElem.className = 'absolute text-3xl animate-fall cursor-pointer z-10'
-        emojiElem.textContent = emoji
+    //     // Create a falling emoji
+    //     const emojiElem = document.createElement('div')
+    //     emojiElem.className = 'absolute text-3xl animate-fall cursor-pointer z-10'
+    //     emojiElem.textContent = emoji
 
-        // Random position
-        const left = Math.random() * (gameArea.offsetWidth - 40)
-        emojiElem.style.left = `${left}px`
-        emojiElem.style.top = '-40px'
+    //     // Random position
+    //     const left = Math.random() * (gameArea.offsetWidth - 40)
+    //     emojiElem.style.left = `${left}px`
+    //     emojiElem.style.top = '-40px'
 
-        // Click handler to catch emoji
-        emojiElem.onclick = () => {
-            setScore(prevScore => prevScore + 1)
-            emojiElem.remove()
-        }
+    //     // Click handler to catch emoji
+    //     emojiElem.onclick = () => {
+    //         setScore(prevScore => prevScore + 1)
+    //         emojiElem.remove()
+    //     }
 
-        gameArea.appendChild(emojiElem)
+    //     gameArea.appendChild(emojiElem)
 
-        // Remove emoji after animation
-        setTimeout(() => {
-            if (emojiElem && emojiElem.parentNode === gameArea) {
-                emojiElem.remove()
-            }
-        }, 3000)
-    }
+    //     // Remove emoji after animation
+    //     setTimeout(() => {
+    //         if (emojiElem && emojiElem.parentNode === gameArea) {
+    //             emojiElem.remove()
+    //         }
+    //     }, 3000)
+    // }
 
     // Load random meme on mount
     useEffect(() => {
@@ -142,27 +139,27 @@ export default function Custom404() {
     }, [])
 
     // Game timer
-    useEffect(() => {
-        let gameTimer
-        let emojiSpawner
+    // useEffect(() => {
+    //     let gameTimer
+    //     let emojiSpawner
 
-        if (gameActive) {
-            // End game after 30 seconds
-            gameTimer = setTimeout(() => {
-                setGameActive(false)
-            }, 30000)
+    //     if (gameActive) {
+    //         // End game after 30 seconds
+    //         gameTimer = setTimeout(() => {
+    //             setGameActive(false)
+    //         }, 30000)
 
-            // Spawn emoji every second
-            emojiSpawner = setInterval(() => {
-                handleGameClick()
-            }, 1000)
-        }
+    //         // Spawn emoji every second
+    //         emojiSpawner = setInterval(() => {
+    //             handleGameClick()
+    //         }, 1000)
+    //     }
 
-        return () => {
-            clearTimeout(gameTimer)
-            clearInterval(emojiSpawner)
-        }
-    }, [gameActive])
+    //     return () => {
+    //         clearTimeout(gameTimer)
+    //         clearInterval(emojiSpawner)
+    //     }
+    // }, [gameActive])
 
     // Animation variants
     const containerVariants = {
@@ -444,7 +441,7 @@ export default function Custom404() {
                         </motion.div>
 
                         {/* Game and collection section */}
-                        <motion.div
+                        {/* <motion.div
                             variants={itemVariants}
                             className="bg-gradient-to-r from-indigo-100 to-purple-100 rounded-xl p-6 mb-8"
                         >
@@ -474,10 +471,10 @@ export default function Custom404() {
                                     <span>View Meme Collection</span>
                                 </motion.button>
                             </div>
-                        </motion.div>
+                        </motion.div> */}
 
                         {/* Easter egg text */}
-                        <motion.p
+                        {/* <motion.p
                             variants={itemVariants}
                             className="text-gray-500 text-sm text-center"
                         >
@@ -485,7 +482,7 @@ export default function Custom404() {
                             {collectedMemes.length > 0 && ` You've collected ${collectedMemes.length}/${memes404.length} rare memes.`}
                             <br />
                             <span className="text-xs">Try opening different non-existent URLs to find them all!</span>
-                        </motion.p>
+                        </motion.p> */}
 
                         {/* CSS for falling animations */}
                         <style jsx global>{`

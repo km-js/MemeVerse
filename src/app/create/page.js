@@ -1,13 +1,11 @@
 'use client'
 import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useMeme } from '@/contexts/MemeContext';
 import MemeEditor from '@/components/create/MemeEditor';
 import MemePreview from '@/components/create/MemePreview';
 import AICaptionGenerator from '@/components/create/AICaptionGenerator';
-import MemeGallery from '@/components/create/MemeGallery';
 import { useRouter } from 'next/navigation';
 import { Toaster, toast } from 'react-hot-toast';
 

@@ -84,18 +84,7 @@ export default function Header() {
 
           {/* Actions */}
           <div className="flex items-center space-x-3">
-            {/* User Profile Button */}
-            <Link
-              href="/user"
-              className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-              aria-label="User Profile"
-            >
-              {/* <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-              </svg> */}
-              <Image src="/user.png" alt="User" width={24} height={24} />
-            </Link>
-
+           
             {/* Dark Mode Toggle */}
             {mounted && (<button
               onClick={toggleDarkMode}
@@ -120,7 +109,18 @@ export default function Header() {
               )}
             </button>)}
 
-
+ {/* User Profile Button */}
+ <Link
+              href="/user"
+              className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              aria-label="User Profile"
+            >
+              {/* <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg> */}
+              <Image src="/user.png" alt="User" width={24} height={24} />
+            </Link>
+            
             {/* Mobile Menu Button - Hidden on larger screens */}
             <button className="md:hidden p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

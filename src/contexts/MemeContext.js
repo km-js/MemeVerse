@@ -13,7 +13,8 @@ export function MemeProvider({ children }) {
   });
   const [currentMeme, setCurrentMeme] = useState(null);
   const [loading, setLoading] = useState(true);
-  // Rename generatedMemes to userMemes and load from localStorage
+
+  //Load from localStorage
   const [userMemes, setUserMemes] = useState(() => {
     const savedUserMemes = localStorage.getItem('userMemes');
     return savedUserMemes ? JSON.parse(savedUserMemes) : [];
@@ -25,7 +26,7 @@ export function MemeProvider({ children }) {
     console.log('Liked memes saved to localStorage:', likedMemes);
   }, [likedMemes]);
 
-  // Add new effect to sync userMemes to localStorage
+  // Sync userMemes to localStorage
   useEffect(() => {
     localStorage.setItem('userMemes', JSON.stringify(userMemes));
     console.log('User memes saved to localStorage:', userMemes);
@@ -106,7 +107,7 @@ export function MemeProvider({ children }) {
 
   const getMeme = async (id) => {
     try {
-      // Update to check userMemes instead of generatedMemes
+
       const existingMeme = [...memes, ...userMemes].find(m => m.id === id);
       if (existingMeme) return existingMeme;
       const meme = await getMemeById(id);
@@ -142,7 +143,7 @@ export function MemeProvider({ children }) {
   };
 
   const likeMeme = (id) => {
-    // Update to check userMemes instead of generatedMemes
+    // Check userMemes
     const memeToAdd = [...memes, ...userMemes].find(meme => meme.id === id);
     if (!memeToAdd) {
       console.error('Meme not found:', id);
@@ -157,7 +158,7 @@ export function MemeProvider({ children }) {
       return prev;
     });
     setMemes(prev => prev.map(meme => meme.id === id ? { ...meme, likes: meme.likes + 1, hasLiked: true } : meme));
-    // Update userMemes instead of generatedMemes
+    // Update userMemes
     setUserMemes(prev => prev.map(meme => meme.id === id ? { ...meme, likes: meme.likes + 1, hasLiked: true } : meme));
     if (currentMeme && currentMeme.id === id) {
       setCurrentMeme(prev => ({ ...prev, likes: prev.likes + 1, hasLiked: true }));
@@ -171,7 +172,7 @@ export function MemeProvider({ children }) {
       return newLiked;
     });
     setMemes(prev => prev.map(meme => meme.id === id ? { ...meme, likes: Math.max(meme.likes - 1, 0), hasLiked: false } : meme));
-    // Update userMemes instead of generatedMemes
+    // Update userMemes 
     setUserMemes(prev => prev.map(meme => meme.id === id ? { ...meme, likes: Math.max(meme.likes - 1, 0), hasLiked: false } : meme));
     if (currentMeme && currentMeme.id === id) {
       setCurrentMeme(prev => ({ ...prev, likes: Math.max(prev.likes - 1, 0), hasLiked: false }));
@@ -179,7 +180,7 @@ export function MemeProvider({ children }) {
   };
 
   const toggleLike = (id) => {
-    // Update to check userMemes instead of generatedMemes
+    // Update to check userMemes 
     const meme = memes.find(m => m.id === id) || userMemes.find(m => m.id === id);
     if (meme) {
       if (meme.hasLiked) {
@@ -198,7 +199,7 @@ export function MemeProvider({ children }) {
       user: `user${Math.floor(Math.random() * 1000)}`,
       timestamp: new Date()
     };
-    setMemes(prev => 
+    setMemes(prev =>
       prev.map(meme => {
         if (meme.id === memeId) {
           const updatedComments = [...(meme.comments || []), newComment];
@@ -207,8 +208,8 @@ export function MemeProvider({ children }) {
         return meme;
       })
     );
-    // Update userMemes instead of generatedMemes
-    setUserMemes(prev => 
+    // Update userMemes 
+    setUserMemes(prev =>
       prev.map(meme => {
         if (meme.id === memeId) {
           const updatedComments = [...(meme.comments || []), newComment];
@@ -269,7 +270,7 @@ export function MemeProvider({ children }) {
 
   const getTrendingMemes = () => memes.filter(meme => meme.trending);
   const getNewMemes = () => memes.filter(meme => meme.isNew);
-  // Update to return userMemes instead of generatedMemes
+  //return userMemes
   const getUserMemes = () => userMemes;
 
   // Function to delete user meme
@@ -284,7 +285,7 @@ export function MemeProvider({ children }) {
     likedMemes,
     currentMeme,
     loading,
-    userMemes, // Expose userMemes instead of generatedMemes
+    userMemes, 
     getMeme,
     likeMeme,
     unlikeMeme,
@@ -294,9 +295,9 @@ export function MemeProvider({ children }) {
     setCurrentMemeById,
     getTrendingMemes,
     getNewMemes,
-    createMeme: createUserMeme, // Change the main createMeme to point to createUserMeme
-    createApiMeme, // Expose the API-based meme creation as a separate function
-    getUserMemes, // Update function name
+    createMeme: createUserMeme,
+    createApiMeme,
+    getUserMemes, 
     deleteMeme,
   };
 
