@@ -2,7 +2,7 @@
 
 **MemeVerse** is a multi-page, highly interactive meme platform where users can explore, upload, and engage with memes. Built with **Next.js, Tailwind CSS, and Framer Motion**, this app ensures a smooth and fun meme experience.
 
-[Deployed Link](https://meme-verse-dun.vercel.app/) 
+[Deployed Link](https://meme-verse-j9n3okm44-km-js-projects.vercel.app/) 
 
 ---
 
