@@ -285,7 +285,7 @@ export function MemeProvider({ children }) {
     likedMemes,
     currentMeme,
     loading,
-    userMemes, 
+    userMemes,
     getMeme,
     likeMeme,
     unlikeMeme,
@@ -297,7 +297,7 @@ export function MemeProvider({ children }) {
     getNewMemes,
     createMeme: createUserMeme,
     createApiMeme,
-    getUserMemes, 
+    getUserMemes,
     deleteMeme,
   };
 

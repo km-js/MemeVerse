@@ -7,7 +7,7 @@ import { getMemeById } from '@/utils/memeApi';
 import { useParams } from 'next/navigation';
 
 export default function MemePage() {
-    const { memes,setCurrentMeme, currentMeme } = useMeme();
+    const { memes, setCurrentMeme, currentMeme } = useMeme();
     const routeParams = useParams(); // Returns an object with route parameters
     const id = routeParams.id; // Extract the `id` from route parameters
 

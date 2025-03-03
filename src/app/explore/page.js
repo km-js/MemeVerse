@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
 import { useMeme } from '@/contexts/MemeContext';
 import MemeCard from '@/components/meme/MemeCard';
 
@@ -89,17 +88,17 @@ export default function MemeExplorer() {
     }
   };
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
+  // const toggleDarkMode = () => {
+  //   setDarkMode(!darkMode);
+  // };
 
-  const calculateDaysAgo = (date) => {
-    const now = new Date();
-    const uploadDate = new Date(date);
-    const diffTime = now - uploadDate;
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  };
+  // const calculateDaysAgo = (date) => {
+  //   const now = new Date();
+  //   const uploadDate = new Date(date);
+  //   const diffTime = now - uploadDate;
+  //   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  //   return diffDays;
+  // };
 
   // Animation variants
   const containerVariants = {
@@ -110,14 +109,14 @@ export default function MemeExplorer() {
     },
   };
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { type: 'spring', stiffness: 100 },
-    },
-  };
+  // const itemVariants = {
+  //   hidden: { y: 20, opacity: 0 },
+  //   visible: {
+  //     y: 0,
+  //     opacity: 1,
+  //     transition: { type: 'spring', stiffness: 100 },
+  //   },
+  // };
 
   const filterVariants = {
     hidden: { height: 0, opacity: 0 },

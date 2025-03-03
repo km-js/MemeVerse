@@ -110,7 +110,7 @@ export default function MemeCreator() {
         }
     }, []);
 
-  
+
     const handleUpload = async () => {
         if (!selectedFile || !caption) {
             toast.error('Please select an image and add a caption');
@@ -118,7 +118,7 @@ export default function MemeCreator() {
         }
 
         setIsUploading(true);
-        
+
         // Show a loading toast that will be dismissed when upload completes
         const loadingToast = toast.loading('Uploading your meme...');
 
@@ -176,7 +176,7 @@ export default function MemeCreator() {
 
             // Dismiss the loading toast
             toast.dismiss(loadingToast);
-            
+
             // Show success message
             toast.success('Meme created successfully!', {
                 duration: 3000,
@@ -206,85 +206,85 @@ export default function MemeCreator() {
         setFontColor('#ffffff');
     };
 
-    const renderMeme = (meme) => {
-        const likeInfo = likes[meme.id] || { liked: false, count: 0 };
+    // const renderMeme = (meme) => {
+    //     const likeInfo = likes[meme.id] || { liked: false, count: 0 };
 
-        return (
-            <motion.div
-                key={meme.id}
-                variants={itemVariants}
-                className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-                <div className="relative">
-                    <img
-                        src={meme.imageUrl}
-                        alt={meme.caption}
-                        className="w-full h-48 object-cover"
-                    />
-                    <div
-                        className={`absolute w-full text-center ${meme.captionPosition === 'top' ? 'top-2' : 'bottom-2'
-                            } px-2`}
-                    >
-                        <p
-                            style={{
-                                fontSize: `${meme.fontSize}px`,
-                                color: meme.fontColor,
-                                textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                                fontFamily: 'Impact, sans-serif',
-                                lineHeight: 1.2,
-                                margin: 0,
-                                padding: '5px 10px',
-                                wordBreak: 'break-word'
-                            }}
-                        >
-                            {meme.caption}
-                        </p>
-                    </div>
-                </div>
+    //     return (
+    //         <motion.div
+    //             key={meme.id}
+    //             variants={itemVariants}
+    //             className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+    //         >
+    //             <div className="relative">
+    //                 <img
+    //                     src={meme.imageUrl}
+    //                     alt={meme.caption}
+    //                     className="w-full h-48 object-cover"
+    //                 />
+    //                 <div
+    //                     className={`absolute w-full text-center ${meme.captionPosition === 'top' ? 'top-2' : 'bottom-2'
+    //                         } px-2`}
+    //                 >
+    //                     <p
+    //                         style={{
+    //                             fontSize: `${meme.fontSize}px`,
+    //                             color: meme.fontColor,
+    //                             textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+    //                             fontFamily: 'Impact, sans-serif',
+    //                             lineHeight: 1.2,
+    //                             margin: 0,
+    //                             padding: '5px 10px',
+    //                             wordBreak: 'break-word'
+    //                         }}
+    //                     >
+    //                         {meme.caption}
+    //                     </p>
+    //                 </div>
+    //             </div>
 
-                <div className="p-3 flex justify-between items-center">
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                        {new Date(meme.createdAt).toLocaleDateString()}
-                    </span>
-                    <div className="flex space-x-2">
-                        <button
-                            onClick={() => toggleLike(meme.id)}
-                            className={`p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${likeInfo.liked ? 'text-red-500' : 'text-gray-400 dark:text-gray-500'
-                                }`}
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-6 w-6"
-                                fill={likeInfo.liked ? "currentColor" : "none"}
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={1.5}
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                                />
-                            </svg>
-                        </button>
-                        <button
-                            onClick={() => deleteMeme(meme.id)}
-                            className="p-1 rounded text-gray-400 dark:text-gray-500 hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </motion.div>
-        );
-    };
+    //             <div className="p-3 flex justify-between items-center">
+    //                 <span className="text-sm text-gray-500 dark:text-gray-400">
+    //                     {new Date(meme.createdAt).toLocaleDateString()}
+    //                 </span>
+    //                 <div className="flex space-x-2">
+    //                     <button
+    //                         onClick={() => toggleLike(meme.id)}
+    //                         className={`p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${likeInfo.liked ? 'text-red-500' : 'text-gray-400 dark:text-gray-500'
+    //                             }`}
+    //                     >
+    //                         <svg
+    //                             xmlns="http://www.w3.org/2000/svg"
+    //                             className="h-6 w-6"
+    //                             fill={likeInfo.liked ? "currentColor" : "none"}
+    //                             viewBox="0 0 24 24"
+    //                             stroke="currentColor"
+    //                         >
+    //                             <path
+    //                                 strokeLinecap="round"
+    //                                 strokeLinejoin="round"
+    //                                 strokeWidth={1.5}
+    //                                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+    //                             />
+    //                         </svg>
+    //                     </button>
+    //                     <button
+    //                         onClick={() => deleteMeme(meme.id)}
+    //                         className="p-1 rounded text-gray-400 dark:text-gray-500 hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+    //                     >
+    //                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    //                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+    //                         </svg>
+    //                     </button>
+    //                 </div>
+    //             </div>
+    //         </motion.div>
+    //     );
+    // };
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
             {/* Toast notifications container */}
-            <Toaster 
+            <Toaster
                 position="top-right"
                 toastOptions={{
                     style: {
@@ -294,7 +294,7 @@ export default function MemeCreator() {
                     },
                 }}
             />
-            
+
             <main>
                 {/* Create Meme Content */}
                 <section className="py-8">
@@ -410,7 +410,7 @@ export default function MemeCreator() {
                                             >
                                                 Cancel
                                             </motion.button>
-                                            
+
                                             <Link href="/user">
                                                 <motion.button
                                                     whileHover={{ scale: 1.05 }}

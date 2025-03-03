@@ -8,7 +8,7 @@ import { ShareButton } from './ShareButton';
 
 export default function MemeDetails({ id, memeName }) {
   const { currentMeme } = useMeme();
-  
+
   if (!currentMeme) {
     return (
       <div className="max-w-5xl mx-auto p-6">
@@ -23,7 +23,7 @@ export default function MemeDetails({ id, memeName }) {
       </div>
     );
   }
-  
+
   return (
     <div className="max-w-5xl mx-auto p-6">
       <motion.div
@@ -46,11 +46,11 @@ export default function MemeDetails({ id, memeName }) {
               />
             </div>
           </div>
-          
+
           {/* Content section */}
           <div className="md:w-2/5 p-6">
             <div className="mb-6">
-              <motion.h1 
+              <motion.h1
                 className="text-2xl md:text-3xl font-bold mb-3 text-gray-900 dark:text-white"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -58,16 +58,16 @@ export default function MemeDetails({ id, memeName }) {
               >
                 {currentMeme.name}
               </motion.h1>
-              
+
               {currentMeme.category && (
                 <span className="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 rounded-full text-sm font-medium">
                   {currentMeme.category}
                 </span>
               )}
             </div>
-            
+
             {/* Action buttons */}
-            <motion.div 
+            <motion.div
               className="flex items-center space-x-6 my-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -76,9 +76,9 @@ export default function MemeDetails({ id, memeName }) {
               <LikeButton id={id} />
               <ShareButton memeName={memeName} />
             </motion.div>
-            
+
             <div className="h-px bg-gray-200 dark:bg-gray-700 my-6"></div>
-            
+
             {/* Comments section */}
             <CommentSection id={id} />
           </div>

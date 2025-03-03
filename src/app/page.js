@@ -3,16 +3,10 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-// import TrendingMemesSection from '@/components/home/TrendingMemesSection';
 import MemeCard from '@/components/meme/MemeCard';
 import { useMeme } from '@/contexts/MemeContext';
-// import useLocalStorage from '@/hooks/useLocalStorage';
 
 const Home = () => {
-  // Theme state
-  // const [mounted, setMounted] = useState(false);
-  // const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
-
   // Context and States
   const { memes, toggleLike } = useMeme();
   const [trendingMemes, setTrendingMemes] = useState([]);

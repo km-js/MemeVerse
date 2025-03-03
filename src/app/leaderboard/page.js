@@ -116,7 +116,7 @@ export default function Leaderboard() {
                             exit={{ opacity: 0 }}
                             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                             variants={containerVariants}
-                          
+
                         >
                             {topMemes.length === 0 ? (
                                 <div className="col-span-full text-center py-16">
@@ -141,17 +141,17 @@ export default function Leaderboard() {
                                             </div>
                                         </div>
                                         <div className="relative">
-                                        <Link href={`/meme/${meme.id}`} className="block overflow-hidden bg-gray-200 dark:bg-gray-700 relative">
-                                            <img
-                                                src={meme.url}
-                                                alt={meme.name}
-                                                className="w-full h-52 object-cover"
-                                            />
-                                            <div
-                                                className={`absolute w-full text-center ${meme.captionPosition === 'top' ? 'top-2' : 'bottom-2'
-                                                    } px-2`}
-                                            >
-                                                {/* <p
+                                            <Link href={`/meme/${meme.id}`} className="block overflow-hidden bg-gray-200 dark:bg-gray-700 relative">
+                                                <img
+                                                    src={meme.url}
+                                                    alt={meme.name}
+                                                    className="w-full h-52 object-cover"
+                                                />
+                                                <div
+                                                    className={`absolute w-full text-center ${meme.captionPosition === 'top' ? 'top-2' : 'bottom-2'
+                                                        } px-2`}
+                                                >
+                                                    {/* <p
                                                     style={{
                                                         fontSize: `${meme.fontSize}px`,
                                                         color: meme.fontColor,
@@ -165,7 +165,7 @@ export default function Leaderboard() {
                                                 >
                                                     {meme.caption}
                                                 </p> */}
-                                            </div>
+                                                </div>
                                             </Link>
                                         </div>
                                         <div className="p-4">
