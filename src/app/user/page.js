@@ -154,15 +154,7 @@ export default function UserProfile() {
         return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
     };
 
-    //   const getRandomEmoji = () => {
-    //     const emojis = ['😂', '🤣', '😎', '🔥', '💯', '👽', '🚀', '✨', '🎉', '🤪'];
-    //     return emojis[Math.floor(Math.random() * emojis.length)];
-    //   };
-
     const renderMeme = (meme) => {
-        // const likeInfo = likes[meme.id] || { liked: false, count: 0 };
-        // const randomEmoji = getRandomEmoji();
-
         return (
             <motion.div
                 key={meme.id}
@@ -197,30 +189,9 @@ export default function UserProfile() {
 
                 <div className="p-3 flex justify-between items-center">
                     <span className="text-sm text-gray-500 dark:text-gray-400 flex items-center">
-                        {/* <span className="mr-1">📅</span> */}
                         {formatDate(meme.createdAt)}
                     </span>
                     <div className="flex space-x-2">
-                        {/* <button
-                            onClick={() => toggleLike(meme.id)}
-                            className={`p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${likeInfo.liked ? 'text-red-500' : 'text-gray-400 dark:text-gray-500'}`}
-                            aria-label={likeInfo.liked ? "Unlike" : "Like"}
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-6 w-6"
-                                fill={likeInfo.liked ? "currentColor" : "none"}
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={1.5}
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                                />
-                            </svg>
-                        </button> */}
                         <button
                             onClick={() => deleteMeme(meme.id)}
                             className="p-1 rounded text-gray-400 dark:text-gray-500 hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -241,7 +212,7 @@ export default function UserProfile() {
             <main>
 
                 {/* Profile Section */}
-                <section className="py-8">
+                <section className="py-6 md:py-8">
                     <div className="container mx-auto px-4">
                         <motion.div
                             initial="hidden"
@@ -249,12 +220,12 @@ export default function UserProfile() {
                             variants={containerVariants}
                             className="max-w-6xl mx-auto"
                         >
-                            <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
+                            <div className="bg-white dark:bg-gray-800 rounded-xl p-4 md:p-8 shadow-lg">
                                 {isEditing ? (
                                     <form onSubmit={handleSubmit} className="space-y-6">
                                         <div className="flex flex-col md:flex-row md:space-x-8">
                                             <div className="mb-6 md:mb-0">
-                                                <div className="relative w-32 h-32 rounded-full overflow-hidden mx-auto md:mx-0 bg-yellow-100 dark:bg-yellow-900">
+                                                <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden mx-auto md:mx-0 bg-yellow-100 dark:bg-yellow-900">
                                                     {tempProfile.profilePic ? (
                                                         <img
                                                             src={tempProfile.profilePic}
@@ -340,8 +311,8 @@ export default function UserProfile() {
                                     </form>
                                 ) : (
                                     <div className="flex flex-col md:flex-row md:space-x-8">
-                                        <div className="mb-6 md:mb-0 flex flex-col items-center">
-                                            <div className="w-32 h-32 rounded-full overflow-hidden bg-yellow-100 dark:bg-yellow-900">
+                                        <div className="mb-6 md:mb-0 flex flex-col items-center md:items-start">
+                                            <div className="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden bg-yellow-100 dark:bg-yellow-900">
                                                 {isClient && userProfile.profilePic ? (
                                                     <img
                                                         src={userProfile.profilePic}
@@ -355,14 +326,14 @@ export default function UserProfile() {
                                         </div>
 
                                         <div className="flex-1">
-                                            <div className="flex items-center justify-between mb-4">
-                                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
+                                            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+                                                <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center">
                                                     <span className="mr-2">👋</span>
                                                     {userProfile.name}
                                                 </h2>
                                                 <button
                                                     onClick={() => setIsEditing(true)}
-                                                    className="text-yellow-500 hover:text-yellow-600 flex items-center"
+                                                    className="text-yellow-500 hover:text-yellow-600 flex items-center justify-center sm:justify-start"
                                                 >
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -375,24 +346,24 @@ export default function UserProfile() {
                                                 <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 flex items-center">
                                                     <span className="mr-2">📝</span>Bio
                                                 </h3>
-                                                <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line">
+                                                <p className="text-gray-800 dark:text-gray-200 whitespace-pre-line text-sm md:text-base">
                                                     {userProfile.bio || "No bio provided yet. Click 'Edit Profile' to add one!"}
                                                 </p>
                                             </div>
 
-                                            <div className="mt-6 flex space-x-6">
-                                                <div className="text-center bg-yellow-100 dark:bg-yellow-900/30 p-3 rounded-lg">
-                                                    <div className="text-2xl font-bold text-gray-900 dark:text-white flex items-center justify-center">
+                                            <div className="mt-6 flex space-x-4 md:space-x-6">
+                                                <div className="text-center bg-yellow-100 dark:bg-yellow-900/30 p-2 md:p-3 rounded-lg">
+                                                    <div className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center justify-center">
                                                         <span className="mr-2">🖼️</span>{userMemes.length}
                                                     </div>
-                                                    <div className="text-sm text-gray-500 dark:text-gray-400">Memes</div>
+                                                    <div className="text-xs md:text-sm text-gray-500 dark:text-gray-400">Memes</div>
                                                 </div>
-                                                <div className="text-center bg-red-100 dark:bg-red-900/30 p-3 rounded-lg">
-                                                    <div className="text-2xl font-bold text-gray-900 dark:text-white flex items-center justify-center" suppressHydrationWarning>
+                                                <div className="text-center bg-red-100 dark:bg-red-900/30 p-2 md:p-3 rounded-lg">
+                                                    <div className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center justify-center" suppressHydrationWarning>
                                                         <span className="mr-2">❤️</span>
-                                                        {/* {Object.values(likes).filter(like => like.liked).length} */}{likedMemes.length}
+                                                        {likedMemes.length}
                                                     </div>
-                                                    <div className="text-sm text-gray-500 dark:text-gray-400">Likes</div>
+                                                    <div className="text-xs md:text-sm text-gray-500 dark:text-gray-400">Likes</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -404,40 +375,37 @@ export default function UserProfile() {
                 </section>
 
                 {/* Tab Navigation */}
-                <section id="memes-section" className="bg-white dark:bg-gray-800 shadow-md mt-8">
+                <section id="memes-section" className="bg-white dark:bg-gray-800 shadow-md mt-4 md:mt-8">
                     <div className="container mx-auto px-4">
-                        <div className="max-w-6xl mx-auto flex justify-between">
-                            <div className="flex border-b border-gray-200 dark:border-gray-700">
+                        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between">
+                            <div className="flex overflow-x-auto scrollbar-hide border-b border-gray-200 dark:border-gray-700">
                                 <button
                                     onClick={() => setActiveTab('my-memes')}
-                                    className={`py-4 px-6 font-medium text-lg flex items-center ${activeTab === 'my-memes' ? 'text-yellow-500 border-b-2 border-yellow-500' : 'text-gray-600 dark:text-gray-300'}`}
+                                    className={`py-3 md:py-4 px-4 md:px-6 font-medium text-base md:text-lg flex items-center whitespace-nowrap ${activeTab === 'my-memes' ? 'text-yellow-500 border-b-2 border-yellow-500' : 'text-gray-600 dark:text-gray-300'}`}
                                 >
                                     <span className="mr-2">🎨</span>My Memes
                                 </button>
                                 <button
                                     onClick={() => setActiveTab('liked-memes')}
-                                    className={`py-4 px-6 font-medium text-lg flex items-center ${activeTab === 'liked-memes' ? 'text-yellow-500 border-b-2 border-yellow-500' : 'text-gray-600 dark:text-gray-300'}`}
+                                    className={`py-3 md:py-4 px-4 md:px-6 font-medium text-base md:text-lg flex items-center whitespace-nowrap ${activeTab === 'liked-memes' ? 'text-yellow-500 border-b-2 border-yellow-500' : 'text-gray-600 dark:text-gray-300'}`}
                                 >
                                     <span className="mr-2">❤️</span>Liked Memes
                                 </button>
-
                             </div>
-                            <div>  <Link
-                                href="/create"
-                                className="py-4 px-6 font-medium text-lg flex items-center text-gray-600 dark:text-gray-300"
-                            >
-                                {/* <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg> */}
-                                <span className="mr-2">🌱</span>Create Meme
-                                {/* <span className="hidden md:inline">Create Meme</span> */}
-                            </Link></div>
+                            <div className="mt-3 sm:mt-0">
+                                <Link
+                                    href="/create"
+                                    className="py-3 md:py-4 px-4 md:px-6 font-medium text-base md:text-lg flex items-center text-gray-600 dark:text-gray-300 hover:text-yellow-500 transition-colors"
+                                >
+                                    <span className="mr-2">🌱</span>Create Meme
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </section>
 
                 {/* Content Sections */}
-                <section className="py-12">
+                <section className="py-8 md:py-12">
                     <div className="container mx-auto px-4">
                         {activeTab === 'my-memes' && (
                             <motion.div
@@ -447,20 +415,20 @@ export default function UserProfile() {
                                 className="max-w-6xl mx-auto"
                             >
                                 {memes.length === 0 ? (
-                                    <div className="bg-white dark:bg-gray-800 rounded-xl p-12 text-center shadow-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-12 text-center shadow-lg">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 md:h-16 md:w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
-                                        <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">No Memes Yet 😢</h3>
+                                        <h3 className="text-lg md:text-xl font-medium text-gray-900 dark:text-white mb-2">No Memes Yet 😢</h3>
                                         <p className="text-gray-600 dark:text-gray-300 mb-6">Time to share your creativity with the world!</p>
                                         <Link href="/create">
-                                            <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-medium shadow-md transform transition hover:scale-105 flex items-center mx-auto">
+                                            <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium shadow-md transform transition hover:scale-105 flex items-center mx-auto text-sm md:text-base">
                                                 <span className="mr-2">🚀</span>Create a Meme
                                             </button>
                                         </Link>
                                     </div>
                                 ) : (
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                                         {userMemes.map(meme => renderMeme(meme))}
                                     </div>
                                 )}
@@ -475,20 +443,20 @@ export default function UserProfile() {
                                 className="max-w-6xl mx-auto"
                             >
                                 {likedMemes.length === 0 ? (
-                                    <div className="bg-white dark:bg-gray-800 rounded-xl p-12 text-center shadow-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-12 text-center shadow-lg">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 md:h-16 md:w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                         </svg>
-                                        <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">No Liked Memes Yet 🤔</h3>
+                                        <h3 className="text-lg md:text-xl font-medium text-gray-900 dark:text-white mb-2">No Liked Memes Yet 🤔</h3>
                                         <p className="text-gray-600 dark:text-gray-300 mb-6">Find some awesome memes and show them some love!</p>
                                         <Link href="/">
-                                            <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-medium shadow-md transform transition hover:scale-105 flex items-center mx-auto">
+                                            <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium shadow-md transform transition hover:scale-105 flex items-center mx-auto text-sm md:text-base">
                                                 <span className="mr-2">🔍</span>Browse Memes
                                             </button>
                                         </Link>
                                     </div>
                                 ) : (
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                                         {likedMemes.map(meme => <MemeCard meme={meme} key={meme.id} toggleLike={toggleLike} />)}
                                     </div>
                                 )}
