@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 📌 MemeVerse - The Ultimate Meme Hub
 
-## Getting Started
+**MemeVerse** is a multi-page, highly interactive meme platform where users can explore, upload, and engage with memes. Built with **Next.js, Tailwind CSS, and Framer Motion**, this app ensures a smooth and fun meme experience.
 
-First, run the development server:
+[Deployed Link](https://meme-verse-hf5v55fxm-km-js-projects.vercel.app/) 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Features & Pages
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 🔹 Homepage (Landing Page)
+- Displays **trending memes dynamically** (Fetched from an API).
+- **Interactive animations & transitions** using Framer Motion.
+- **Dark mode toggle** for a personalized experience.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🔹 Meme Explorer Page
+- **Infinite scrolling** or **pagination** for endless meme discovery.
+- **Filter memes by categories** (Trending, New, Classic, Random).
+- **Search functionality** with **debounced API calls**.
+- **Sort memes** by likes, date, or comments.
 
-## Learn More
+### 🔹 Meme Upload Page
+- Upload memes (**image/gif format**).
+- Add **funny captions** using a built-in text editor.
+- **AI-powered meme caption generator** (Using Meme APIs).
+- **Live preview before uploading**.
 
-To learn more about Next.js, take a look at the following resources:
+### 🔹 Meme Details Page
+- Dynamic **routing (`/meme/:id`)** to show meme details.
+- **Like & comment system** (Saved in Local Storage).
+- **Share memes** via social media.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🔹 User Profile Page
+- Displays **user-uploaded memes**.
+- Edit **profile info** (Name, Bio, Profile Picture).
+- View **liked memes** (Saved in local storage or API).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🔹 Leaderboard Page
+- Shows **Top 10 most liked memes**.
+- **User rankings** based on meme engagement.
 
-## Deploy on Vercel
+### 🔹 404 Page (Easter Egg)
+- Fun, **meme-based error page** when visiting an invalid route.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠️ Tech Stack
+
+| Technology  | Purpose  |
+|-------------|---------|
+| **Next.js** | Server-side rendering & routing |
+| **React.js** | Frontend UI components |
+| **Tailwind CSS** | Styling |
+| **Framer Motion / GSAP** | Animations |
+| **Redux Toolkit / Context API** | State management |
+| **Local Storage / IndexedDB** | Caching data |
+| **Cloudinary / Firebase** | Image uploads |
+| **Meme APIs** | Fetching trending memes |
+| **Lighthouse / React Profiler** | Performance optimization |
+
+---
+
+## 📡 APIs Used
+
+- **[Imgflip API](https://imgflip.com/api)** - Fetch & generate memes.
+- **[Meme Generator API](https://api.memegen.link/docs/)** - Create memes dynamically.
+- **[ImgBB API](https://api.imgbb.com/)** - Free image hosting.
+
+---
+
+## 🎯 Skills Showcased
+
+- **UI/UX Design**: A clean, modern meme-sharing experience.
+- **Animations**: Smooth transitions using Framer Motion.
+- **State Management**: Redux Toolkit for efficient data flow.
+- **Performance Optimization**: Lazy loading, image optimization.
+- **Dark Mode**: System-based theme detection & toggle.
+- **Accessibility & Responsiveness**: Fully responsive, mobile-first design.
+
+---
