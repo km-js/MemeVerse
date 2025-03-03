@@ -33,7 +33,7 @@ export default function UserProfile() {
     const [isLoading, setIsLoading] = useState(false);
     const [isClient, setIsClient] = useState(false);
 
-    const { memes, likes, toggleLike, deleteMeme, likedMemes } = useMeme();
+    const { memes, userMemes, likes, toggleLike, deleteMeme, likedMemes } = useMeme();
 
     // Animation variants
     const containerVariants = {
@@ -72,7 +72,7 @@ export default function UserProfile() {
 
     useEffect(() => {
         console.log('UserProfile likedMemes updated:', likedMemes);
-      }, [likedMemes]);
+    }, [likedMemes]);
 
     if (!hasMounted) {
         return null; // Or a loading skeleton
@@ -383,14 +383,14 @@ export default function UserProfile() {
                                             <div className="mt-6 flex space-x-6">
                                                 <div className="text-center bg-yellow-100 dark:bg-yellow-900/30 p-3 rounded-lg">
                                                     <div className="text-2xl font-bold text-gray-900 dark:text-white flex items-center justify-center">
-                                                        <span className="mr-2">🖼️</span>{memes.length}
+                                                        <span className="mr-2">🖼️</span>{userMemes.length}
                                                     </div>
                                                     <div className="text-sm text-gray-500 dark:text-gray-400">Memes</div>
                                                 </div>
                                                 <div className="text-center bg-red-100 dark:bg-red-900/30 p-3 rounded-lg">
                                                     <div className="text-2xl font-bold text-gray-900 dark:text-white flex items-center justify-center" suppressHydrationWarning>
                                                         <span className="mr-2">❤️</span>
-                                                        {/* {Object.values(likes).filter(like => like.liked).length} */}
+                                                        {/* {Object.values(likes).filter(like => like.liked).length} */}{likedMemes.length}
                                                     </div>
                                                     <div className="text-sm text-gray-500 dark:text-gray-400">Likes</div>
                                                 </div>
@@ -461,7 +461,7 @@ export default function UserProfile() {
                                     </div>
                                 ) : (
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {memes.map(meme => renderMeme(meme))}
+                                        {userMemes.map(meme => renderMeme(meme))}
                                     </div>
                                 )}
                             </motion.div>

@@ -8,7 +8,8 @@ import MemeEditor from '@/components/create/MemeEditor';
 import MemePreview from '@/components/create/MemePreview';
 import AICaptionGenerator from '@/components/create/AICaptionGenerator';
 import MemeGallery from '@/components/create/MemeGallery';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
+import { Toaster, toast } from 'react-hot-toast';
 
 export default function MemeCreator() {
     // State management
@@ -23,7 +24,7 @@ export default function MemeCreator() {
     const fileInputRef = useRef(null);
     const dropZoneRef = useRef(null);
 
-    const { memes, addMeme, getLikedMemes, likes, toggleLike, deleteMeme } = useMeme();
+    const { memes, createMeme, getLikedMemes, likes, toggleLike, deleteMeme } = useMeme();
 
     const router = useRouter();
 
@@ -59,7 +60,7 @@ export default function MemeCreator() {
             const url = URL.createObjectURL(file);
             setPreviewUrl(url);
         } else {
-            alert('Please select a valid image or GIF file');
+            toast.error('Please select a valid image or GIF file');
         }
     };
 
@@ -111,13 +112,17 @@ export default function MemeCreator() {
         }
     }, []);
 
+  
     const handleUpload = async () => {
         if (!selectedFile || !caption) {
-            alert('Please select an image and add a caption');
+            toast.error('Please select an image and add a caption');
             return;
         }
 
         setIsUploading(true);
+        
+        // Show a loading toast that will be dismissed when upload completes
+        const loadingToast = toast.loading('Uploading your meme...');
 
         try {
             // Create FormData to send the image to ImgBB
@@ -153,86 +158,46 @@ export default function MemeCreator() {
                 fontSize,
                 fontColor,
                 createdAt: new Date().toISOString(),
-                deleteUrl: data.data.delete_url
+                deleteUrl: data.data.delete_url,
+                // Add additional properties that other memes have
+                likes: 0,
+                hasLiked: false,
+                isNew: true,
+                trending: false,
+                isCustom: true,
+                uploadedDate: new Date(),
+                comments: [],
+                commentCount: 0
             };
 
-            // Add to Context state
-            addMeme(newMeme);
+            // Add to Context state using the renamed function
+            createMeme(newMeme);
 
             // Reset form
             resetForm();
 
-            // Navigate to the user page
-            // router.push('/user');
+            // Dismiss the loading toast
+            toast.dismiss(loadingToast);
+            
+            // Show success message
+            toast.success('Meme created successfully!', {
+                duration: 3000,
+                icon: '🎉'
+            });
+
+            // Navigate to user profile page after short delay to show the toast
+            setTimeout(() => {
+                router.push('/user');
+            }, 1000);
 
         } catch (error) {
             console.error('Error uploading meme:', error);
-            alert('Error uploading meme: ' + (error.message || 'Please try again.'));
+            toast.dismiss(loadingToast);
+            toast.error('Error uploading meme: ' + (error.message || 'Please try again.'));
         } finally {
             setIsUploading(false);
         }
     };
-
-    // const handleUpload = async () => {
-    //     if (!selectedFile || !caption) {
-    //         alert('Please select an image and add a caption');
-    //         return;
-    //     }
-
-    //     setIsUploading(true);
-
-    //     try {
-    //         // Create FormData to send the image to ImgBB
-    //         const formData = new FormData();
-    //         formData.append('image', selectedFile);
-
-    //         // Replace with your ImgBB API key
-    //         formData.append('key', process.env.NEXT_PUBLIC_IMGBB_API_KEY);
-
-    //         // Upload to ImgBB
-    //         const response = await fetch('https://api.imgbb.com/1/upload', {
-    //             method: 'POST',
-    //             body: formData
-    //         });
-
-    //         const data = await response.json();
-
-    //         if (!data.success) {
-    //             throw new Error(data.error?.message || 'Upload failed');
-    //         }
-
-    //         // Get the hosted image URL from ImgBB response
-    //         const hostedImageUrl = data.data.url;
-
-    //         const newMeme = {
-    //             id: Date.now().toString(),
-    //             imageUrl: hostedImageUrl,
-    //             caption,
-    //             captionPosition,
-    //             fontSize,
-    //             fontColor,
-    //             createdAt: new Date().toISOString(),
-    //             deleteUrl: data.data.delete_url
-    //         };
-
-    //         // Add to Context state
-    //         addMeme(newMeme);
-
-    //         // Reset form and scroll to the My Memes tab
-    //         resetForm();
-    //         setActiveTab('my-memes');
-
-    //         // Smooth scroll to the memes section
-    //         document.getElementById('memes-section').scrollIntoView({ behavior: 'smooth' });
-
-    //         alert('Meme uploaded successfully!');
-    //     } catch (error) {
-    //         console.error('Error uploading meme:', error);
-    //         alert('Error uploading meme: ' + (error.message || 'Please try again.'));
-    //     } finally {
-    //         setIsUploading(false);
-    //     }
-    // };
 
     const resetForm = () => {
         setSelectedFile(null);
@@ -241,11 +206,6 @@ export default function MemeCreator() {
         setCaptionPosition('top');
         setFontSize(32);
         setFontColor('#ffffff');
-    };
-
-    // Toggle function for the user profile section
-    const toggleProfileSection = () => {
-        setShowProfileSection(!showProfileSection);
     };
 
     const renderMeme = (meme) => {
@@ -325,71 +285,19 @@ export default function MemeCreator() {
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+            {/* Toast notifications container */}
+            <Toaster 
+                position="top-right"
+                toastOptions={{
+                    style: {
+                        borderRadius: '10px',
+                        background: '#333',
+                        color: '#fff',
+                    },
+                }}
+            />
+            
             <main>
-                {/* Header */}
-                {/* <section className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-20">
-                    <div className="container mx-auto px-4 py-4">
-                        <div className="flex items-center justify-between">
-                            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                Create New Meme
-                            </h1>
-                            <Link 
-                                href="/"
-                                className="text-gray-600 dark:text-gray-300 hover:text-vibrant-pink transition-colors flex items-center"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                                </svg>
-                                Back to Home
-                            </Link>
-                        </div>
-                    </div>
-                </section> */}
-
-                {/* <section className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-20">
-                    <div className="container mx-auto px-4 py-4">
-                        <div className="flex items-center justify-between">
-                            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                Create New Meme
-                            </h1>
-                            <div className="flex items-center space-x-4">
-                                <button
-                                    onClick={toggleProfileSection}
-                                    className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-light-yellow transition-colors"
-                                >
-                                    {!isLoading && userProfile && (
-                                        <div className="flex items-center">
-                                            <img
-                                                src={userProfile.profilePic}
-                                                alt="Profile"
-                                                className="w-8 h-8 rounded-full object-cover mr-2"
-                                            />
-                                            <span className="hidden md:inline">{userProfile.name}</span>
-                                        </div>
-                                    )}
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
-                                </button>
-                                <Link
-                                    href="/"
-                                    className="text-gray-600 dark:text-gray-300 hover:text-vibrant-pink transition-colors flex items-center"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                                    </svg>
-                                    <span className="hidden md:inline">Back to Home</span>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </section> */}
-
-                {/* Conditionally render the User Profile section */}
-                {/* {showProfileSection && !isLoading && (
-                    <UserProfile userProfile={userProfile} setUserProfile={setUserProfile} />
-                )} */}
-
                 {/* Create Meme Content */}
                 <section className="py-8">
                     <div className="container mx-auto px-4">
@@ -504,6 +412,16 @@ export default function MemeCreator() {
                                             >
                                                 Cancel
                                             </motion.button>
+                                            
+                                            <Link href="/user">
+                                                <motion.button
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                    className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium shadow-md"
+                                                >
+                                                    Go to My Memes
+                                                </motion.button>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
@@ -528,104 +446,6 @@ export default function MemeCreator() {
                         </div>
                     </section>
                 )}
-
-                {/* Divider */}
-                {/* <div className="container mx-auto px-4 py-8">
-                    <div className="max-w-6xl mx-auto">
-                        <div className="flex items-center">
-                            <div className="flex-grow h-px bg-gray-300 dark:bg-gray-700"></div>
-                            <span className="px-4 text-gray-500 dark:text-gray-400 text-sm uppercase">Your Memes</span>
-                            <div className="flex-grow h-px bg-gray-300 dark:bg-gray-700"></div>
-                        </div>
-                    </div>
-                </div> */}
-
-                <MemeGallery />
-
-                {/* Tab Navigation */}
-                {/* <section id="memes-section" className="bg-white dark:bg-gray-800 shadow-md">
-                    <div className="container mx-auto px-4">
-                        <div className="max-w-6xl mx-auto">
-                            <div className="flex border-b border-gray-200 dark:border-gray-700">
-                                <button
-                                    onClick={() => setActiveTab('my-memes')}
-                                    className={`py-4 px-6 font-medium text-lg ${activeTab === 'my-memes' ? 'text-vibrant-pink border-b-2 border-vibrant-pink' : 'text-gray-600 dark:text-gray-300'}`}
-                                >
-                                    My Memes
-                                </button>
-                                <button
-                                    onClick={() => setActiveTab('liked-memes')}
-                                    className={`py-4 px-6 font-medium text-lg ${activeTab === 'liked-memes' ? 'text-vibrant-pink border-b-2 border-vibrant-pink' : 'text-gray-600 dark:text-gray-300'}`}
-                                >
-                                    Liked Memes
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </section> */}
-
-                {/* Content Sections */}
-                {/* <section className="py-12">
-                    <div className="container mx-auto px-4">
-                        {activeTab === 'my-memes' && (
-                            <motion.div
-                                initial="hidden"
-                                animate="visible"
-                                variants={containerVariants}
-                                className="max-w-6xl mx-auto"
-                            >
-                                {memes.length === 0 ? (
-                                    <div className="bg-white dark:bg-gray-800 rounded-xl p-12 text-center shadow-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">No Memes Yet</h3>
-                                        <p className="text-gray-600 dark:text-gray-300 mb-6">Upload an image above to create your first meme</p>
-                                        <button
-                                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                                            className="bg-vibrant-pink hover:bg-pink-700 text-white px-6 py-3 rounded-lg font-medium shadow-md"
-                                        >
-                                            Create a Meme
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {memes.map(meme => renderMeme(meme))}
-                                    </div>
-                                )}
-                            </motion.div>
-                        )}
-
-                        {activeTab === 'liked-memes' && (
-                            <motion.div
-                                initial="hidden"
-                                animate="visible"
-                                variants={containerVariants}
-                                className="max-w-6xl mx-auto"
-                            >
-                                {Object.keys(likes).filter(id => likes[id].liked).length === 0 ? (
-                                    <div className="bg-white dark:bg-gray-800 rounded-xl p-12 text-center shadow-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                        </svg>
-                                        <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">No Liked Memes Yet</h3>
-                                        <p className="text-gray-600 dark:text-gray-300 mb-6">Like some memes to see them appear here</p>
-                                        <button
-                                            onClick={() => setActiveTab('my-memes')}
-                                            className="bg-vibrant-pink hover:bg-pink-700 text-white px-6 py-3 rounded-lg font-medium shadow-md"
-                                        >
-                                            Go to My Memes
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {memes.filter(meme => likes[meme.id]?.liked).map(meme => renderMeme(meme))}
-                                    </div>
-                                )}
-                            </motion.div>
-                        )}
-                    </div>
-                </section> */}
             </main>
         </div>
     );

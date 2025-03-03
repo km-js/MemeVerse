@@ -29,7 +29,6 @@ export const generateMeme = async (templateId, topText, bottomText) => {
 };
 
 
-// lib/api/memeApi.js
 export async function getMemeById(id) {
   try {
     // For demonstration, we're using the Imgflip API to get a list of memes
