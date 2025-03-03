@@ -12,11 +12,11 @@ export default function Custom404() {
     const [collectedMemes, setCollectedMemes] = useState([])
     const [showCollection, setShowCollection] = useState(false)
     const gameRef = useRef(null)
+    const [isBrowser, setIsBrowser] = useState(false)
 
     // Collection of funny 404 meme data with emoji pairs
     const memes404 = [
         {
-            // imageUrl: '/images/404/confused-travolta.gif',
             imageUrl: 'https://media1.tenor.com/m/s3mSfN97IMAAAAAC/john-travolta-kuddelzwerg.gif',
             caption: "Looking for a page that doesn't exist",
             altText: "Confused John Travolta looking around meme",
@@ -24,7 +24,6 @@ export default function Custom404() {
             id: 'travolta'
         },
         {
-            // imageUrl: '/images/404/surprised-pikachu.jpg',
             imageUrl: 'https://media1.tenor.com/m/ZhKMg4_yCTgAAAAC/surprised-pikachu.gif',
             caption: "When you realize the URL doesn't exist",
             altText: "Surprised Pikachu meme",
@@ -32,7 +31,6 @@ export default function Custom404() {
             id: 'pikachu'
         },
         {
-            // imageUrl: '/images/404/this-is-fine.jpg',
             imageUrl: 'https://media1.tenor.com/m/5BOVutzvWJgAAAAC/shmorky-this-is-fine.gif',
             caption: "404 error. This is fine.",
             altText: "This is fine dog meme",
@@ -40,34 +38,12 @@ export default function Custom404() {
             id: 'this-is-fine'
         },
         {
-            // imageUrl: '/images/404/homer-bush.gif',
             imageUrl: 'https://media1.tenor.com/m/XcW2X_rp2PUAAAAC/simpsonovi-simpsons.gif',
             caption: "The page you're looking for disappeared like...",
             altText: "Homer Simpson disappearing into bushes meme",
             emoji: '🌳',
             id: 'homer'
         },
-        // {
-        //     imageUrl: '/images/404/what-year-is-it.jpg',
-        //     caption: "Finding a 404 page in 2025",
-        //     altText: "What year is it Robin Williams Jumanji meme",
-        //     emoji: '📅',
-        //     id: 'jumanji'
-        // },
-        // {
-        //     imageUrl: '/images/404/fry-not-sure.jpg',
-        //     caption: "Not sure if wrong URL or website broken",
-        //     altText: "Futurama Fry squinting meme",
-        //     emoji: '🤔',
-        //     id: 'fry'
-        // },
-        // {
-        //     imageUrl: '/images/404/awkward-seal.jpg',
-        //     caption: "When you click a link and get 404'd",
-        //     altText: "Awkward seal meme",
-        //     emoji: '😬',
-        //     id: 'seal'
-        // },
     ]
 
     // Fallback images with meme styling
@@ -84,52 +60,9 @@ export default function Custom404() {
         return selectedMeme
     }
 
-    // Start the catch emoji game
-    // const startGame = () => {
-    //     setGameActive(true)
-    //     setScore(0)
-
-    //     // Add the current meme to collection if not already there
-    //     if (randomMeme && !collectedMemes.some(meme => meme.id === randomMeme.id)) {
-    //         setCollectedMemes([...collectedMemes, randomMeme])
-    //     }
-    // }
-
-    // Handle game click
-    // const handleGameClick = (e) => {
-    //     if (!gameActive) return
-
-    //     const gameArea = gameRef.current
-    //     if (!gameArea) return
-
-    //     // Create a falling emoji
-    //     const emojiElem = document.createElement('div')
-    //     emojiElem.className = 'absolute text-3xl animate-fall cursor-pointer z-10'
-    //     emojiElem.textContent = emoji
-
-    //     // Random position
-    //     const left = Math.random() * (gameArea.offsetWidth - 40)
-    //     emojiElem.style.left = `${left}px`
-    //     emojiElem.style.top = '-40px'
-
-    //     // Click handler to catch emoji
-    //     emojiElem.onclick = () => {
-    //         setScore(prevScore => prevScore + 1)
-    //         emojiElem.remove()
-    //     }
-
-    //     gameArea.appendChild(emojiElem)
-
-    //     // Remove emoji after animation
-    //     setTimeout(() => {
-    //         if (emojiElem && emojiElem.parentNode === gameArea) {
-    //             emojiElem.remove()
-    //         }
-    //     }, 3000)
-    // }
-
-    // Load random meme on mount
+    // Set isBrowser to true once component mounts
     useEffect(() => {
+        setIsBrowser(true)
         const timer = setTimeout(() => {
             setRandomMeme(getRandomMeme())
             setLoading(false)
@@ -138,28 +71,19 @@ export default function Custom404() {
         return () => clearTimeout(timer)
     }, [])
 
-    // Game timer
-    // useEffect(() => {
-    //     let gameTimer
-    //     let emojiSpawner
+    // Handle image error
+    const handleImageError = (e) => {
+        e.target.src = fallbackImageUrl
+    }
 
-    //     if (gameActive) {
-    //         // End game after 30 seconds
-    //         gameTimer = setTimeout(() => {
-    //             setGameActive(false)
-    //         }, 30000)
-
-    //         // Spawn emoji every second
-    //         emojiSpawner = setInterval(() => {
-    //             handleGameClick()
-    //         }, 1000)
-    //     }
-
-    //     return () => {
-    //         clearTimeout(gameTimer)
-    //         clearInterval(emojiSpawner)
-    //     }
-    // }, [gameActive])
+    // Show another meme
+    const showAnotherMeme = () => {
+        setLoading(true)
+        setTimeout(() => {
+            setRandomMeme(getRandomMeme())
+            setLoading(false)
+        }, 400)
+    }
 
     // Animation variants
     const containerVariants = {
@@ -187,20 +111,6 @@ export default function Custom404() {
             scale: [1, 1.05, 1],
             transition: { repeat: Infinity, duration: 2 }
         }
-    }
-
-    // Handle image error
-    const handleImageError = (e) => {
-        e.target.src = fallbackImageUrl
-    }
-
-    // Show another meme
-    const showAnotherMeme = () => {
-        setLoading(true)
-        setTimeout(() => {
-            setRandomMeme(getRandomMeme())
-            setLoading(false)
-        }, 400)
     }
 
     return (
@@ -235,30 +145,6 @@ export default function Custom404() {
                     </div>
                 ) : (
                     <>
-                        {/* Game area overlay */}
-                        {gameActive && (
-                            <div
-                                ref={gameRef}
-                                onClick={handleGameClick}
-                                className="fixed inset-0 bg-black/50 backdrop-blur-sm flex flex-col items-center justify-center z-50"
-                            >
-                                <div className="bg-white rounded-xl p-6 text-center max-w-md">
-                                    <h3 className="text-2xl font-bold mb-2">Catch the {emoji}!</h3>
-                                    <p className="mb-4">Click on the falling emojis. Score as many as you can in 30 seconds!</p>
-                                    <div className="text-5xl font-bold mb-6">{score}</div>
-                                    <button
-                                        onClick={() => setGameActive(false)}
-                                        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                                    >
-                                        End Game
-                                    </button>
-                                </div>
-                                <div className="absolute top-4 right-4 bg-white/80 rounded-full px-3 py-1 font-bold text-lg">
-                                    {score} points
-                                </div>
-                            </div>
-                        )}
-
                         {/* Collection modal */}
                         <AnimatePresence>
                             {showCollection && (
@@ -440,69 +326,25 @@ export default function Custom404() {
                             </motion.button>
                         </motion.div>
 
-                        {/* Game and collection section */}
-                        {/* <motion.div
-                            variants={itemVariants}
-                            className="bg-gradient-to-r from-indigo-100 to-purple-100 rounded-xl p-6 mb-8"
-                        >
-                            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                                <span className="mr-2">404 Page Extras</span>
-                                <span className="text-2xl">✨</span>
-                            </h3>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <motion.button
-                                    onClick={startGame}
-                                    className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-medium rounded-lg p-4 shadow-md hover:from-indigo-600 hover:to-purple-600 transition-all flex items-center justify-center space-x-2"
-                                    whileHover="pulse"
-                                    variants={pulseVariants}
-                                >
-                                    <span className="text-xl">🎮</span>
-                                    <span>Play Catch the Emoji</span>
-                                </motion.button>
-
-                                <motion.button
-                                    onClick={() => setShowCollection(true)}
-                                    className="bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium rounded-lg p-4 shadow-md hover:from-amber-600 hover:to-yellow-600 transition-all flex items-center justify-center space-x-2"
-                                    whileHover="pulse"
-                                    variants={pulseVariants}
-                                >
-                                    <span className="text-xl">🏆</span>
-                                    <span>View Meme Collection</span>
-                                </motion.button>
-                            </div>
-                        </motion.div> */}
-
-                        {/* Easter egg text */}
-                        {/* <motion.p
-                            variants={itemVariants}
-                            className="text-gray-500 text-sm text-center"
-                        >
-                            You've found our secret 404 page!
-                            {collectedMemes.length > 0 && ` You've collected ${collectedMemes.length}/${memes404.length} rare memes.`}
-                            <br />
-                            <span className="text-xs">Try opening different non-existent URLs to find them all!</span>
-                        </motion.p> */}
-
                         {/* CSS for falling animations */}
                         <style jsx global>{`
-              @keyframes float {
-                0% { transform: translateY(-20px); opacity: 0; }
-                10% { opacity: 0.5; }
-                90% { opacity: 0.5; }
-                100% { transform: translateY(100vh); opacity: 0; }
-              }
-              
-              @keyframes fall {
-                0% { transform: translateY(-40px); opacity: 1; }
-                80% { opacity: 1; }
-                100% { transform: translateY(400px); opacity: 0; }
-              }
-              
-              .animate-fall {
-                animation: fall 3s linear forwards;
-              }
-            `}</style>
+                            @keyframes float {
+                                0% { transform: translateY(-20px); opacity: 0; }
+                                10% { opacity: 0.5; }
+                                90% { opacity: 0.5; }
+                                100% { transform: translateY(100vh); opacity: 0; }
+                            }
+                            
+                            @keyframes fall {
+                                0% { transform: translateY(-40px); opacity: 1; }
+                                80% { opacity: 1; }
+                                100% { transform: translateY(400px); opacity: 0; }
+                            }
+                            
+                            .animate-fall {
+                                animation: fall 3s linear forwards;
+                            }
+                        `}</style>
                     </>
                 )}
             </motion.div>
