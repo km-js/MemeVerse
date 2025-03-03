@@ -12,7 +12,7 @@ export default function Custom404() {
     const [collectedMemes, setCollectedMemes] = useState([])
     const [showCollection, setShowCollection] = useState(false)
     const gameRef = useRef(null)
-    const [isBrowser, setIsBrowser] = useState(false)
+    const [isMounted, setIsMounted] = useState(false)
 
     // Collection of funny 404 meme data with emoji pairs
     const memes404 = [
@@ -51,18 +51,15 @@ export default function Custom404() {
 
     // Choose a random meme that hasn't been collected yet
     const getRandomMeme = () => {
-        let availableMemes = memes404
-
-        const randomIndex = Math.floor(Math.random() * availableMemes.length)
-        const selectedMeme = availableMemes[randomIndex]
-
+        const randomIndex = Math.floor(Math.random() * memes404.length)
+        const selectedMeme = memes404[randomIndex]
         setEmoji(selectedMeme.emoji)
         return selectedMeme
     }
 
-    // Set isBrowser to true once component mounts
+    // Set component as mounted once rendered on client
     useEffect(() => {
-        setIsBrowser(true)
+        setIsMounted(true)
         const timer = setTimeout(() => {
             setRandomMeme(getRandomMeme())
             setLoading(false)
@@ -106,11 +103,16 @@ export default function Custom404() {
         }
     }
 
-    const pulseVariants = {
-        pulse: {
-            scale: [1, 1.05, 1],
-            transition: { repeat: Infinity, duration: 2 }
-        }
+    // If not mounted yet (during SSR), render a minimal placeholder
+    if (!isMounted) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 p-4">
+                {/* <div className="text-center">
+                    <h1 className="text-6xl font-bold">404</h1>
+                    <p className="mt-4">Page Not Found</p>
+                </div> */}
+            </div>
+        )
     }
 
     return (
