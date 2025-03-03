@@ -1,20 +1,26 @@
-'use client'
-
+'use client';
 import { createContext, useContext, useState, useEffect } from 'react';
 import { getAllMemes, getMemeById, generateMeme } from '@/utils/memeApi';
 
-// Create the context
 const MemeContext = createContext();
 
-// Provider component
 export function MemeProvider({ children }) {
   const [memes, setMemes] = useState([]);
-  const [likedMemes, setLikedMemes] = useState([]);
+  const [likedMemes, setLikedMemes] = useState(() => {
+    // Load initial state from localStorage
+    const savedLikedMemes = localStorage.getItem('likedMemes');
+    return savedLikedMemes ? JSON.parse(savedLikedMemes) : [];
+  });
   const [currentMeme, setCurrentMeme] = useState(null);
   const [loading, setLoading] = useState(true);
   const [generatedMemes, setGeneratedMemes] = useState([]);
 
-  // Generate random comments
+  // Sync likedMemes to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('likedMemes', JSON.stringify(likedMemes));
+    console.log('Liked memes saved to localStorage:', likedMemes);
+  }, [likedMemes]);
+
   const generateRandomComments = (memeId) => {
     const commentTexts = [
       "This is hilarious! 😂",
@@ -33,11 +39,8 @@ export function MemeProvider({ children }) {
       "Mood forever",
       "This just made my day 👏"
     ];
-
-    // Generate random number of comments (0-5)
     const numComments = Math.floor(Math.random() * 6);
     const memeComments = [];
-
     for (let i = 0; i < numComments; i++) {
       const commentIndex = Math.floor(Math.random() * commentTexts.length);
       memeComments.push({
@@ -45,53 +48,42 @@ export function MemeProvider({ children }) {
         memeId,
         text: commentTexts[commentIndex],
         user: `user${Math.floor(Math.random() * 1000)}`,
-        timestamp: new Date(Date.now() - Math.floor(Math.random() * 604800000)) // Random time in the last week
+        timestamp: new Date(Date.now() - Math.floor(Math.random() * 604800000))
       });
     }
-
     return memeComments;
   };
 
-  // Generate random like counts for each meme
-  const generateRandomLikes = (memeId) => {
-    // Random like count between 5 and 500
-    return Math.floor(Math.random() * 496) + 5;
-  };
+  const generateRandomLikes = (memeId) => Math.floor(Math.random() * 496) + 5;
 
-  // Generate random upload date within the last 6 months
   const generateRandomUploadDate = () => {
     const now = new Date();
-    // Random date between now and 6 months ago
-    const randomTime = now.getTime() - Math.floor(Math.random() * 15778800000); // ~6 months in milliseconds
+    const randomTime = now.getTime() - Math.floor(Math.random() * 15778800000);
     return new Date(randomTime);
   };
 
-  // Fetch memes from your existing API
   useEffect(() => {
     const fetchMemes = async () => {
       setLoading(true);
       try {
         const fetchedMemes = await getAllMemes();
-
         const processedMemes = fetchedMemes.map(meme => {
           const trending = Math.random() > 0.8;
           const isNew = !trending && Math.random() > 0.9;
           const uploadedDate = generateRandomUploadDate();
           const likesCount = generateRandomLikes(meme.id);
           const memeComments = generateRandomComments(meme.id);
-
           return {
             ...meme,
             trending,
             isNew,
             uploadedDate,
             likes: likesCount,
-            hasLiked: false,
+            hasLiked: likedMemes.some(liked => liked.id === meme.id), // Sync with likedMemes
             comments: memeComments,
             commentCount: memeComments.length
           };
         });
-
         setMemes(processedMemes);
       } catch (error) {
         console.error('Error fetching memes:', error);
@@ -99,30 +91,24 @@ export function MemeProvider({ children }) {
         setLoading(false);
       }
     };
-
     fetchMemes();
   }, []);
 
-  // Get a meme by id using your existing API
   const getMeme = async (id) => {
     try {
       const existingMeme = [...memes, ...generatedMemes].find(m => m.id === id);
-      if (existingMeme) {
-        return existingMeme;
-      }
-
+      if (existingMeme) return existingMeme;
       const meme = await getMemeById(id);
       const uploadedDate = generateRandomUploadDate();
       const likesCount = generateRandomLikes(id);
       const memeComments = generateRandomComments(id);
-
       return {
         ...meme,
         trending: Math.random() > 0.8,
         isNew: Math.random() > 0.9,
         uploadedDate,
         likes: likesCount,
-        hasLiked: false,
+        hasLiked: likedMemes.some(liked => liked.id === id), // Sync with likedMemes
         comments: memeComments,
         commentCount: memeComments.length
       };
@@ -132,7 +118,6 @@ export function MemeProvider({ children }) {
     }
   };
 
-  // Set current meme by ID
   const setCurrentMemeById = async (id) => {
     setLoading(true);
     try {
@@ -145,81 +130,40 @@ export function MemeProvider({ children }) {
     }
   };
 
-  // Like a meme
   const likeMeme = (id) => {
     const memeToAdd = [...memes, ...generatedMemes].find(meme => meme.id === id);
-    
     if (!memeToAdd) {
       console.error('Meme not found:', id);
       return;
     }
-
-    // Update likedMemes with hasLiked set to true
     setLikedMemes(prev => {
       if (!prev.some(meme => meme.id === id)) {
-        return [...prev, { ...memeToAdd, hasLiked: true }];
+        const newLiked = [...prev, { ...memeToAdd, hasLiked: true }];
+        console.log('Liked memes after like:', newLiked);
+        return newLiked;
       }
       return prev;
     });
-
-    // Update likes count in the memes array
-    setMemes(prev => 
-      prev.map(meme => 
-        meme.id === id 
-          ? { ...meme, likes: meme.likes + 1, hasLiked: true } 
-          : meme
-      )
-    );
-
-    // Update likes count in the generated memes array if applicable
-    setGeneratedMemes(prev => 
-      prev.map(meme => 
-        meme.id === id 
-          ? { ...meme, likes: meme.likes + 1, hasLiked: true } 
-          : meme
-      )
-    );
-
-    // If this is the current meme, update it
+    setMemes(prev => prev.map(meme => meme.id === id ? { ...meme, likes: meme.likes + 1, hasLiked: true } : meme));
+    setGeneratedMemes(prev => prev.map(meme => meme.id === id ? { ...meme, likes: meme.likes + 1, hasLiked: true } : meme));
     if (currentMeme && currentMeme.id === id) {
-      setCurrentMeme(prev => ({
-        ...prev,
-        likes: prev.likes + 1,
-        hasLiked: true
-      }));
+      setCurrentMeme(prev => ({ ...prev, likes: prev.likes + 1, hasLiked: true }));
     }
   };
 
-  // Unlike a meme
   const unlikeMeme = (id) => {
-    setLikedMemes(prev => prev.filter(meme => meme.id !== id));
-
-    setMemes(prev => 
-      prev.map(meme => 
-        meme.id === id 
-          ? { ...meme, likes: Math.max(meme.likes - 1, 0), hasLiked: false } 
-          : meme
-      )
-    );
-
-    setGeneratedMemes(prev => 
-      prev.map(meme => 
-        meme.id === id 
-          ? { ...meme, likes: Math.max(meme.likes - 1, 0), hasLiked: false } 
-          : meme
-      )
-    );
-
+    setLikedMemes(prev => {
+      const newLiked = prev.filter(meme => meme.id !== id);
+      console.log('Liked memes after unlike:', newLiked);
+      return newLiked;
+    });
+    setMemes(prev => prev.map(meme => meme.id === id ? { ...meme, likes: Math.max(meme.likes - 1, 0), hasLiked: false } : meme));
+    setGeneratedMemes(prev => prev.map(meme => meme.id === id ? { ...meme, likes: Math.max(meme.likes - 1, 0), hasLiked: false } : meme));
     if (currentMeme && currentMeme.id === id) {
-      setCurrentMeme(prev => ({
-        ...prev,
-        likes: Math.max(prev.likes - 1, 0),
-        hasLiked: false
-      }));
+      setCurrentMeme(prev => ({ ...prev, likes: Math.max(prev.likes - 1, 0), hasLiked: false }));
     }
   };
 
-  // Toggle like status
   const toggleLike = (id) => {
     const meme = memes.find(m => m.id === id) || generatedMemes.find(m => m.id === id);
     if (meme) {
@@ -231,61 +175,52 @@ export function MemeProvider({ children }) {
     }
   };
 
-  // Add a comment to a meme
   const addComment = (memeId, text) => {
     const newComment = {
       id: `${memeId}-comment-${Date.now()}`,
       memeId,
       text,
-      user: `user${Math.floor(Math.random() * 1000)}`, // Random user ID for demo
+      user: `user${Math.floor(Math.random() * 1000)}`,
       timestamp: new Date()
     };
-
     setMemes(prev => 
       prev.map(meme => {
         if (meme.id === memeId) {
           const updatedComments = [...(meme.comments || []), newComment];
-          return {
-            ...meme, 
-            comments: updatedComments,
-            commentCount: updatedComments.length
-          };
+          return { ...meme, comments: updatedComments, commentCount: updatedComments.length };
         }
         return meme;
       })
     );
-
     setGeneratedMemes(prev => 
       prev.map(meme => {
         if (meme.id === memeId) {
           const updatedComments = [...(meme.comments || []), newComment];
-          return {
-            ...meme, 
-            comments: updatedComments,
-            commentCount: updatedComments.length
-          };
+          return { ...meme, comments: updatedComments, commentCount: updatedComments.length };
         }
         return meme;
       })
     );
-
+    setLikedMemes(prev =>
+      prev.map(meme => {
+        if (meme.id === memeId) {
+          const updatedComments = [...(meme.comments || []), newComment];
+          return { ...meme, comments: updatedComments, commentCount: updatedComments.length };
+        }
+        return meme;
+      })
+    );
     if (currentMeme && currentMeme.id === memeId) {
       setCurrentMeme(prev => {
         const updatedComments = [...(prev.comments || []), newComment];
-        return {
-          ...prev,
-          comments: updatedComments,
-          commentCount: updatedComments.length
-        };
+        return { ...prev, comments: updatedComments, commentCount: updatedComments.length };
       });
     }
   };
 
-  // Generate a custom meme using your existing API
   const createMeme = async (templateId, topText, bottomText) => {
     try {
       const url = await generateMeme(templateId, topText, bottomText);
-
       const newMeme = {
         id: `generated-${Date.now()}`,
         name: `Custom Meme - ${new Date().toLocaleDateString()}`,
@@ -301,9 +236,7 @@ export function MemeProvider({ children }) {
         comments: [],
         commentCount: 0
       };
-
       setGeneratedMemes(prev => [newMeme, ...prev]);
-
       return newMeme;
     } catch (error) {
       console.error('Error generating meme:', error);
@@ -311,27 +244,10 @@ export function MemeProvider({ children }) {
     }
   };
 
-  // Get trending memes
-  const getTrendingMemes = () => {
-    return memes.filter(meme => meme.trending);
-  };
+  const getTrendingMemes = () => memes.filter(meme => meme.trending);
+  const getNewMemes = () => memes.filter(meme => meme.isNew);
+  const getGeneratedMemes = () => generatedMemes;
 
-  // Get new memes
-  const getNewMemes = () => {
-    return memes.filter(meme => meme.isNew);
-  };
-
-  // Get generated memes
-  const getGeneratedMemes = () => {
-    return generatedMemes;
-  };
-
-  // Get memes liked by the user
-  const getLikedMemes = () => {
-    return likedMemes;
-  };
-
-  // Value to be provided to consumers
   const value = {
     memes,
     likedMemes,
@@ -340,7 +256,7 @@ export function MemeProvider({ children }) {
     getMeme,
     likeMeme,
     unlikeMeme,
-    toggleLike, // Added toggleLike to context value
+    toggleLike,
     addComment,
     setCurrentMeme,
     setCurrentMemeById,
@@ -355,9 +271,8 @@ export function MemeProvider({ children }) {
       {children}
     </MemeContext.Provider>
   );
-}
+};
 
-// Custom hook for using the context
 export const useMeme = () => {
   const context = useContext(MemeContext);
   if (!context) {
