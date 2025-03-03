@@ -7,7 +7,7 @@ import { getMemeById } from '@/utils/memeApi';
 import { useParams } from 'next/navigation';
 
 export default function MemePage() {
-    const { setCurrentMeme, getMemeById: getLocalMeme } = useMeme();
+    const { setCurrentMeme, getMemeById: getLocalMeme, currentMeme } = useMeme();
     const routeParams = useParams(); // Returns an object with route parameters
     const id = routeParams.id; // Extract the `id` from route parameters
 
@@ -38,5 +38,5 @@ export default function MemePage() {
         };
     }, [id]); // Only re-run when `id` changes
 
-    return <MemeDetails id={id} />;
+    return <MemeDetails id={id} memeName={currentMeme?.name} />;
 }
