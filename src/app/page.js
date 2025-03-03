@@ -4,7 +4,8 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import TrendingMemesSection from '@/components/home/TrendingMemesSection';
-import MemeCard from '@/components/MemeCard';
+import MemeCard from '@/components/meme/MemeCard';
+import { useMeme } from '@/contexts/MemeContext';
 // import useLocalStorage from '@/hooks/useLocalStorage';
 
 const Home = () => {
@@ -12,7 +13,8 @@ const Home = () => {
   // const [mounted, setMounted] = useState(false);
   // const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
 
-  // State management
+  // Context and States
+   const { memes, toggleLike } = useMeme(); 
   const [trendingMemes, setTrendingMemes] = useState([]);
   const [featuredMeme, setFeaturedMeme] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -337,7 +339,7 @@ const Home = () => {
                 viewport={{ once: true }}
                 variants={containerVariants}
               >
-                {trendingMemes.map((meme) => (
+                {memes.slice(0, 8).map((meme) => (
                   // <motion.div
                   //   key={meme.id}
                   //   variants={itemVariants}
@@ -377,7 +379,11 @@ const Home = () => {
                   //     </div>
                   //   </Link>
                   // </motion.div>
-                  <MemeCard meme={meme} />
+                  <MemeCard 
+                  key={meme.id}
+                  meme={meme}
+                  toggleLike={toggleLike}
+                />
                 ))}
               </motion.div>
             )}

@@ -334,7 +334,7 @@ export function MemeProvider({ children }) {
   // Value to be provided to consumers
   const value = {
     memes,
-    likedMemes: getLikedMemes(),
+    likedMemes,
     currentMeme,
     loading,
     getMeme,

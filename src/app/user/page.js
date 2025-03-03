@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useMeme } from '@/contexts/MemeContext';
-import MemeCard from '@/components/MemeCard';
+import MemeCard from '@/components/meme/MemeCard';
 
 // Default avatar SVG
 const DefaultAvatar = () => (
@@ -69,6 +69,10 @@ export default function UserProfile() {
             setTempProfile(parsedProfile);
         }
     }, []);
+
+    useEffect(() => {
+        console.log('UserProfile likedMemes updated:', likedMemes);
+      }, [likedMemes]);
 
     if (!hasMounted) {
         return null; // Or a loading skeleton
@@ -485,7 +489,7 @@ export default function UserProfile() {
                                     </div>
                                 ) : (
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {likedMemes.map(meme => <MemeCard meme={meme} key={meme.id} />)}
+                                        {likedMemes.map(meme => <MemeCard meme={meme} key={meme.id} toggleLike={toggleLike} />)}
                                     </div>
                                 )}
                             </motion.div>
