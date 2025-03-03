@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useMeme } from '@/contexts/MemeContext';
+import MemeCard from '@/components/MemeCard';
 
 // Default avatar SVG
 const DefaultAvatar = () => (
@@ -32,7 +33,7 @@ export default function UserProfile() {
     const [isLoading, setIsLoading] = useState(false);
     const [isClient, setIsClient] = useState(false);
 
-    const { memes, likes, toggleLike, deleteMeme } = useMeme();
+    const { memes, likes, toggleLike, deleteMeme, likedMemes } = useMeme();
 
     // Animation variants
     const containerVariants = {
@@ -155,7 +156,7 @@ export default function UserProfile() {
     //   };
 
     const renderMeme = (meme) => {
-        const likeInfo = likes[meme.id] || { liked: false, count: 0 };
+        // const likeInfo = likes[meme.id] || { liked: false, count: 0 };
         // const randomEmoji = getRandomEmoji();
 
         return (
@@ -196,7 +197,7 @@ export default function UserProfile() {
                         {formatDate(meme.createdAt)}
                     </span>
                     <div className="flex space-x-2">
-                        <button
+                        {/* <button
                             onClick={() => toggleLike(meme.id)}
                             className={`p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${likeInfo.liked ? 'text-red-500' : 'text-gray-400 dark:text-gray-500'}`}
                             aria-label={likeInfo.liked ? "Unlike" : "Like"}
@@ -215,7 +216,7 @@ export default function UserProfile() {
                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                                 />
                             </svg>
-                        </button>
+                        </button> */}
                         <button
                             onClick={() => deleteMeme(meme.id)}
                             className="p-1 rounded text-gray-400 dark:text-gray-500 hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -234,36 +235,6 @@ export default function UserProfile() {
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
             <main>
-                {/* Header */}
-                {/* <section className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-20">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
-                <span className="mr-2">😎</span> User Profile
-              </h1>
-              <div className="flex items-center space-x-4">
-                <Link
-                  href="/create"
-                  className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 transition-colors flex items-center"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                  <span className="hidden md:inline">Create Meme</span>
-                </Link>
-                <Link
-                  href="/"
-                  className="text-gray-600 dark:text-gray-300 hover:text-vibrant-pink transition-colors flex items-center"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  <span className="hidden md:inline">Back to Home</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section> */}
 
                 {/* Profile Section */}
                 <section className="py-8">
@@ -415,7 +386,7 @@ export default function UserProfile() {
                                                 <div className="text-center bg-red-100 dark:bg-red-900/30 p-3 rounded-lg">
                                                     <div className="text-2xl font-bold text-gray-900 dark:text-white flex items-center justify-center" suppressHydrationWarning>
                                                         <span className="mr-2">❤️</span>
-                                                        {Object.values(likes).filter(like => like.liked).length}
+                                                        {/* {Object.values(likes).filter(like => like.liked).length} */}
                                                     </div>
                                                     <div className="text-sm text-gray-500 dark:text-gray-400">Likes</div>
                                                 </div>
@@ -499,7 +470,7 @@ export default function UserProfile() {
                                 variants={containerVariants}
                                 className="max-w-6xl mx-auto"
                             >
-                                {Object.keys(likes).filter(id => likes[id].liked).length === 0 ? (
+                                {likedMemes.length === 0 ? (
                                     <div className="bg-white dark:bg-gray-800 rounded-xl p-12 text-center shadow-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -514,7 +485,7 @@ export default function UserProfile() {
                                     </div>
                                 ) : (
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {memes.filter(meme => likes[meme.id]?.liked).map(meme => renderMeme(meme))}
+                                        {likedMemes.map(meme => <MemeCard meme={meme} key={meme.id} />)}
                                     </div>
                                 )}
                             </motion.div>
