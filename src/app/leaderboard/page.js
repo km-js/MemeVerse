@@ -18,7 +18,7 @@ export default function Leaderboard() {
         setTimeout(() => {
             // Get top memes based on likes count
             const sortedMemes = [...memes]
-                .sort((a, b) => (b.likesCount || 0) - (a.likesCount || 0))
+                .sort((a, b) => (b.likes || 0) - (a.likes || 0))
                 .slice(0, 10);
             setTopMemes(sortedMemes);
 
@@ -142,16 +142,17 @@ export default function Leaderboard() {
                                             </div>
                                         </div>
                                         <div className="relative">
+                                        <Link href={`/meme/${meme.id}`} className="block overflow-hidden bg-gray-200 dark:bg-gray-700 relative">
                                             <img
-                                                src={meme.imageUrl}
-                                                alt={meme.caption}
+                                                src={meme.url}
+                                                alt={meme.name}
                                                 className="w-full h-52 object-cover"
                                             />
                                             <div
                                                 className={`absolute w-full text-center ${meme.captionPosition === 'top' ? 'top-2' : 'bottom-2'
                                                     } px-2`}
                                             >
-                                                <p
+                                                {/* <p
                                                     style={{
                                                         fontSize: `${meme.fontSize}px`,
                                                         color: meme.fontColor,
@@ -164,8 +165,9 @@ export default function Leaderboard() {
                                                     }}
                                                 >
                                                     {meme.caption}
-                                                </p>
+                                                </p> */}
                                             </div>
+                                            </Link>
                                         </div>
                                         <div className="p-4">
                                             <div className="flex items-center justify-between">
@@ -173,9 +175,9 @@ export default function Leaderboard() {
                                                     <svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
                                                     </svg>
-                                                    <span className="font-medium">{meme.likesCount || 0} likes</span>
+                                                    <span className="font-medium">{meme.likes || 0} likes</span>
                                                 </div>
-                                                <span className="text-sm text-gray-500">by {meme.username || 'Anonymous'}</span>
+                                                {/* <span className="text-sm text-gray-500">by {meme.username || 'Anonymous'}</span> */}
                                             </div>
                                         </div>
                                     </motion.div>
